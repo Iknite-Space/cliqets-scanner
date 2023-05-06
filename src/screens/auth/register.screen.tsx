@@ -23,7 +23,7 @@ import auth from '@react-native-firebase/auth';
 import {OTP} from 'react-native-otp-form';
 import {CustomButton, CustomModal} from '../../components';
 import {ButtonType} from '../../components/general/Button.component';
-import { ModalType } from '../../components/general/Modal.component';
+import {ModalType} from '../../components/general/Modal.component';
 
 type Props = {
   navigation: any;
@@ -35,6 +35,8 @@ const Register = ({navigation}: Props) => {
   const [confirm, setConfirm] = useState(null);
   const [code, setCode] = useState('');
   const [showBackground, setShowBackground] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [token, setToken] = useState('');
 
   const changeBackground = async (now: any) => {
     setShowBackground(now);
@@ -42,7 +44,10 @@ const Register = ({navigation}: Props) => {
 
   const onAuthStateChanged = (user: any) => {
     if (user) {
-      navigation.navigate('Login');
+      // navigation.navigate('MainStack');
+      user
+        .getIdToken()
+        .then((token: React.SetStateAction<string>) => navigation.navigate('MainStack', { tokenObj: token }));
     }
   };
 
@@ -56,9 +61,9 @@ const Register = ({navigation}: Props) => {
     console.log({phoneNumber});
     console.log('====================================');
     const confirmation: any = await auth().signInWithPhoneNumber(phoneNumber);
-    console.log('====================================');
-    console.log({confirmation});
-    console.log('====================================');
+    // console.log('====================================');
+    // console.log({confirmation});
+    // console.log('====================================');
     setConfirm(confirmation);
   };
 
@@ -68,10 +73,11 @@ const Register = ({navigation}: Props) => {
         console.log('====================================');
         console.log('Code Activated');
         console.log('====================================');
+        // const token = user.getIdToken()
         console.log('====================================');
         console.log(user);
         console.log('====================================');
-        navigation.navigate('OtpVerification');
+        navigation.navigate('MainStack');
       });
     } catch (error) {
       console.log('Invalid Code.');
@@ -126,23 +132,6 @@ const Register = ({navigation}: Props) => {
             <FormControl width="100" my="3" ml="5">
               <Flex direction="row" align="center">
                 <InputGroup>
-                  {/* <TouchableOpacity>
-                    <InputLeftAddon>
-                      <PhoneInput ref={newRef} initialCountry={'cm'} />
-                    </InputLeftAddon>
-                  </TouchableOpacity>
-                  <Input
-                    placeholder="Enter your phone number"
-                    size="lg"
-                    width="250"
-                    maxW="250"
-                    variant="outline"
-                    keyboardType="numeric"
-                    onChangeText={number => {
-                      setPhoneNumber(number);
-                    }}
-                  /> */}
-
                   <PhoneInput
                     ref={newRef}
                     initialCountry={'cm'}
@@ -170,9 +159,9 @@ const Register = ({navigation}: Props) => {
               btnText="Verify phone number"
               btnType={ButtonType.PRIMARY}
             />
-            <CustomModal 
+            <CustomModal
               heading={'Connection failed'}
-              showModal={true}
+              showModal={false}
               modalType={ModalType.ERROR}
               setShowModal={() => {}}
               description={'Check your internet and try again'}
@@ -234,7 +223,7 @@ const Register = ({navigation}: Props) => {
         <OTP
           codeCount={6}
           containerStyle={{marginTop: 16, marginBottom: 16}}
-          otpStyles={{backgroundColor: '#ddd'}}
+          otpStyles={{backgroundColor: '#ddd', padding: -20}}
           keyboardType="numeric"
           onFinish={(value: any) => {
             setCode(value);
@@ -275,3 +264,22 @@ const styles = StyleSheet.create({
 });
 
 export default Register;
+
+{
+  /* <TouchableOpacity>
+                    <InputLeftAddon>
+                      <PhoneInput ref={newRef} initialCountry={'cm'} />
+                    </InputLeftAddon>
+                  </TouchableOpacity>
+                  <Input
+                    placeholder="Enter your phone number"
+                    size="lg"
+                    width="250"
+                    maxW="250"
+                    variant="outline"
+                    keyboardType="numeric"
+                    onChangeText={number => {
+                      setPhoneNumber(number);
+                    }}
+                  /> */
+}
