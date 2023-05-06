@@ -42,7 +42,7 @@ const Register = ({navigation}: Props) => {
 
   const onAuthStateChanged = (user: any) => {
     if (user) {
-      navigation.navigate('Login');
+      // navigation.navigate('Login');
     }
   };
 
@@ -52,26 +52,19 @@ const Register = ({navigation}: Props) => {
   }, []);
 
   const login: any = async (phoneNumber: any) => {
-    console.log('====================================');
     console.log({phoneNumber});
-    console.log('====================================');
     const confirmation: any = await auth().signInWithPhoneNumber(phoneNumber);
-    console.log('====================================');
     console.log({confirmation});
-    console.log('====================================');
     setConfirm(confirmation);
   };
 
   const confirmCode = async () => {
+    console.log("in confirm code")
     try {
       await confirm.confirm(code).then((user: any) => {
-        console.log('====================================');
         console.log('Code Activated');
-        console.log('====================================');
-        console.log('====================================');
         console.log(user);
-        console.log('====================================');
-        navigation.navigate('OtpVerification');
+        navigation.navigate('Events');
       });
     } catch (error) {
       console.log('Invalid Code.');
@@ -172,7 +165,7 @@ const Register = ({navigation}: Props) => {
             />
             <CustomModal 
               heading={'Connection failed'}
-              showModal={true}
+              showModal={false}
               modalType={ModalType.ERROR}
               setShowModal={() => {}}
               description={'Check your internet and try again'}

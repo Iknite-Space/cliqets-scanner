@@ -5,7 +5,7 @@ import {Events, Home, Scanner, Sync} from '../screens';
 const Stack = createNativeStackNavigator();
 const MainStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator initialRouteName="Events">
       <Stack.Screen
         name="Home"
         options={{headerShown: false}}
