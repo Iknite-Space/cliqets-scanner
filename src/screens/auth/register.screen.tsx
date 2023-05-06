@@ -162,7 +162,7 @@ const Register = ({navigation}: Props) => {
               </Flex>
             </FormControl>
 
-            <CustomButton onPress={() => {login(phoneNumber)}} btnText='Verify phone number'/>
+            <CustomButton onPress={() => {login(phoneNumber)}} btnText='Verify phone number'btnType={ButtonType.PRIMARY}/>
           </View>
         </View>
       </TouchableWithoutFeedback>
