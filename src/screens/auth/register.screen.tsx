@@ -21,8 +21,9 @@ import {
 import PhoneInput from 'react-native-phone-input';
 import auth from '@react-native-firebase/auth';
 import {OTP} from 'react-native-otp-form';
-import { CustomButton } from '../../components';
-import { ButtonType } from '../../components/general/Button.component';
+import {CustomButton, CustomModal} from '../../components';
+import {ButtonType} from '../../components/general/Button.component';
+import { ModalType } from '../../components/general/Modal.component';
 
 type Props = {
   navigation: any;
@@ -70,7 +71,7 @@ const Register = ({navigation}: Props) => {
         console.log('====================================');
         console.log(user);
         console.log('====================================');
-        navigation.navigate("OtpVerification");
+        navigation.navigate('OtpVerification');
       });
     } catch (error) {
       console.log('Invalid Code.');
@@ -95,7 +96,7 @@ const Register = ({navigation}: Props) => {
                   source={require('../../assets/Cliqkets_logo.png')}
                   ml="5"
                   mt="3"
-                  alt="#"
+                  alt="logo"
                 />
                 <Text fontSize="4xl" color="white" bold mx="auto" mb="2">
                   Validator
@@ -147,7 +148,7 @@ const Register = ({navigation}: Props) => {
                     initialCountry={'cm'}
                     textProps={{placeholder: 'Enter your phone number'}}
                     flagStyle={{width: 50, height: 35, borderRadius: 5}}
-                    onChangePhoneNumber={number => {                      
+                    onChangePhoneNumber={number => {
                       setPhoneNumber(number);
                     }}
                     textStyle={{
@@ -162,7 +163,23 @@ const Register = ({navigation}: Props) => {
               </Flex>
             </FormControl>
 
-            <CustomButton onPress={() => {login(phoneNumber)}} btnText='Verify phone number'btnType={ButtonType.PRIMARY}/>
+            <CustomButton
+              onPress={() => {
+                login(phoneNumber);
+              }}
+              btnText="Verify phone number"
+              btnType={ButtonType.PRIMARY}
+            />
+            <CustomModal 
+              heading={'Connection failed'}
+              showModal={true}
+              modalType={ModalType.ERROR}
+              setShowModal={() => {}}
+              description={'Check your internet and try again'}
+              btnText={'Try again'}
+              btnType={ButtonType.PRIMARY}
+              onPress={() => {}}
+            />
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -245,10 +262,10 @@ const Register = ({navigation}: Props) => {
 const styles = StyleSheet.create({
   image: {
     flex: 1,
-    flexDirection: "column",
-    maxHeight: "45%",
-    width: "100%",
-    justifyContent: "space-between",
+    flexDirection: 'column',
+    maxHeight: '45%',
+    width: '100%',
+    justifyContent: 'space-between',
   },
   ContainerStyle: {},
   myDropdownContainerStyle: {},
@@ -256,6 +273,5 @@ const styles = StyleSheet.create({
   myDropdownCountryTextStyle: {},
   mycountryNameStyle: {},
 });
-
 
 export default Register;
