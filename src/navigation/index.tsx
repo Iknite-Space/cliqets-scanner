@@ -10,11 +10,11 @@ const MainRouter = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen
+        <Stack.Screen
           name="AuthStack"
           component={AuthStack}
           options={{headerShown: false}}
-        /> */}
+        />
         <Stack.Screen
           name="MainStack"
           component={MainStack}

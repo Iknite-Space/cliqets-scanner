@@ -26,13 +26,13 @@ type Props = {
   navigation: any;
 };
 
-const Sync = ({navigation}: Props, { route }: any) => {
+const Sync = ({navigation}: Props, {route}: any) => {
   const [showModal, setShowModal] = useState(false);
   const [showLogo, setShowLogo] = useState(true);
   const [showFailureModal, setShowFailureModal] = useState(false);
   const [status, setStatus] = useState('');
 
-  let token = route.params.tokenObj;
+  // let token = route.params.tokenObj;
 
   let progress = 0;
 
@@ -44,9 +44,17 @@ const Sync = ({navigation}: Props, { route }: any) => {
     }
   }, 1000);
 
+  const switchScreen = () => {
+    setInterval(() => navigation.navigate('AuthStack'), 5000);
+  };
+
+  useEffect(() => {
+    switchScreen();
+  }, []);
+
   // try {
   //   setStatus('loading')
-    
+
   // } catch (error) {
   //   setStatus('failed')
   // }finally{
@@ -76,7 +84,7 @@ const Sync = ({navigation}: Props, { route }: any) => {
           <Box rounded="full" backgroundColor="green.400" p="3"></Box>
         </Box>
 
-        <Box mx="auto" mt="110%" alignItems="center">
+        {/* <Box mx="auto" mt="110%" alignItems="center">
           {!(showModal || showFailureModal) ? (
             <>
               <Image
@@ -108,9 +116,7 @@ const Sync = ({navigation}: Props, { route }: any) => {
               heading={'Success'}
               showModal={showModal}
               modalType={ModalType.SUCCESS}
-              setShowModal={
-                setShowModal
-            }
+              setShowModal={setShowModal}
               description={'Data Synchronized'}
               btnText={'Continue'}
               btnType={ButtonType.PRIMARY}
@@ -128,15 +134,14 @@ const Sync = ({navigation}: Props, { route }: any) => {
               heading={'Connection failed'}
               showModal={showFailureModal}
               modalType={ModalType.ERROR}
-              setShowModal={setShowFailureModal
-            }
+              setShowModal={setShowFailureModal}
               description={'Check your internet and try again'}
               btnText={'Try again'}
               btnType={ButtonType.PRIMARY}
               onPress={() => {}}
             />
           </Box>
-        </Box>
+        </Box> */}
 
         {!(showModal || showFailureModal) ? (
           <>
@@ -148,7 +153,6 @@ const Sync = ({navigation}: Props, { route }: any) => {
                 colorScheme="primary"
                 mb="4"
               />
-              {/* <Progress.Bar progress={0.3} width={200} height={1} color="#3935F4" animationConfig={{bounciness: 1}} /> */}
             </Box>
           </>
         ) : showModal ? (
@@ -161,7 +165,6 @@ const Sync = ({navigation}: Props, { route }: any) => {
                 colorScheme="primary"
                 mb="4"
               />
-              {/* <Progress.Bar progress={0.3} width={200} height={1} color="#3935F4" /> */}
             </Box>
           </>
         ) : (
