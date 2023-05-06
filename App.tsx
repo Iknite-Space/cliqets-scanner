@@ -1,8 +1,7 @@
-import {NativeBaseProvider, Text, extendTheme} from 'native-base';
+import {NativeBaseProvider, extendTheme} from 'native-base';
 import React from 'react';
 
-import {SafeAreaView} from 'react-native';
-import {CustomButton} from './src/components';
+import MainRouter from './src/navigation';
 
 const newColorTheme = {
   primary: {
@@ -21,13 +20,7 @@ const theme = extendTheme({colors: newColorTheme});
 function App(): JSX.Element {
   return (
     <NativeBaseProvider theme={theme}>
-      <SafeAreaView>
-        <Text color="primary.500">primary 500</Text>
-        <Text color="primary.300">primary 300</Text>
-        <Text color="secondary.500">secondary 500</Text>
-        <Text color="error.500">error 500</Text>
-        <CustomButton btnText="Continue text" />
-      </SafeAreaView>
+      <MainRouter />
     </NativeBaseProvider>
   );
 }

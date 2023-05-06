@@ -6,7 +6,7 @@ import AuthStack from './authstact.navigator';
 
 const Stack = createNativeStackNavigator();
 
-const Router = () => {
+const MainRouter = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -25,4 +25,4 @@ const Router = () => {
   );
 };
 
-export default Router;
+export default MainRouter;
