@@ -47,7 +47,12 @@ const Register = ({navigation}: Props) => {
       // navigation.navigate('MainStack');
       user
         .getIdToken()
-        .then((token: React.SetStateAction<string>) => navigation.navigate('MainStack', {screen: 'Sync', params:{tokenObj: token}}));
+        .then((token: React.SetStateAction<string>) =>
+          navigation.navigate('MainStack', {
+            screen: 'Sync',
+            params: {tokenObj: token},
+          }),
+        );
     }
   };
 
@@ -61,9 +66,9 @@ const Register = ({navigation}: Props) => {
     console.log({phoneNumber});
     console.log('====================================');
     const confirmation: any = await auth().signInWithPhoneNumber(phoneNumber);
-    // console.log('====================================');
-    // console.log({confirmation});
-    // console.log('====================================');
+    console.log('====================================');
+    console.log({confirmation});
+    console.log('====================================');
     setConfirm(confirmation);
   };
 
@@ -75,7 +80,7 @@ const Register = ({navigation}: Props) => {
         console.log('====================================');
         // const token = user.getIdToken()
         console.log('====================================');
-        console.log(user);
+        console.log({user});
         console.log('====================================');
         navigation.navigate('MainStack');
       });
