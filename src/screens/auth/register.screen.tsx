@@ -47,7 +47,7 @@ const Register = ({navigation}: Props) => {
       // navigation.navigate('MainStack');
       user
         .getIdToken()
-        .then((token: React.SetStateAction<string>) => navigation.navigate('MainStack', { tokenObj: token }));
+        .then((token: React.SetStateAction<string>) => navigation.navigate('MainStack', {screen: 'Sync', params:{tokenObj: token}}));
     }
   };
 
