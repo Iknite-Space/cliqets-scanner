@@ -36,35 +36,41 @@ const Register = ({navigation}: Props) => {
   const [code, setCode] = useState('');
   const [showBackground, setShowBackground] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const changeBackground = async (now: any) => {
     setShowBackground(now);
   };
 
-  const onAuthStateChanged = (user: any) => {
-    if (user) {
-      // navigation.navigate('MainStack');
-      user
-        .getIdToken()
-        .then((token: React.SetStateAction<string>) => navigation.navigate('MainStack', {screen: 'Sync', params:{tokenObj: token}}));
-    }
-  };
-
   useEffect(() => {
+    const onAuthStateChanged = (user: any) => {
+      if (user) {
+        // navigation.navigate('MainStack');
+        user.getIdToken().then((token: string) =>
+          navigation.navigate('MainStack', {
+            screen: 'Sync',
+            params: {tokenObj: token},
+          }),
+        );
+      }
+    };
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
-  }, []);
+  }, [navigation]);
 
-  const login: any = async (phoneNumber: any) => {
+  const login: any = async () => {
+    setLoading(true);
     console.log('====================================');
     console.log({phoneNumber});
     console.log('====================================');
     const confirmation: any = await auth().signInWithPhoneNumber(phoneNumber);
     // console.log('====================================');
-    // console.log({confirmation});
+    console.log({confirmation});
     // console.log('====================================');
-    setConfirm(confirmation);
+    if (confirmation) {
+      setConfirm(confirmation);
+      setLoading(false);
+    }
   };
 
   const confirmCode = async () => {
@@ -153,11 +159,11 @@ const Register = ({navigation}: Props) => {
             </FormControl>
 
             <CustomButton
-              onPress={() => {
-                login(phoneNumber);
-              }}
+              onPress={login}
               btnText="Verify phone number"
               btnType={ButtonType.PRIMARY}
+              loading={loading}
+              disabled={!phoneNumber}
             />
             <CustomModal
               heading={'Connection failed'}
@@ -230,7 +236,7 @@ const Register = ({navigation}: Props) => {
           }}
         />
 
-        <Button
+        {/* <Button
           mt="3"
           backgroundColor="#3935F4"
           onPress={() => confirmCode()}
@@ -242,7 +248,14 @@ const Register = ({navigation}: Props) => {
           <Text bold color="white" fontSize="md">
             Confirm Code
           </Text>
-        </Button>
+        </Button> */}
+        <CustomButton
+          btnText={'Confirm code'}
+          btnType={ButtonType.PRIMARY}
+          onPress={confirmCode}
+          loading={loading}
+          disabled={!phoneNumber}
+        />
       </View>
     </TouchableWithoutFeedback>
   );
