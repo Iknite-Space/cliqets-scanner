@@ -37,42 +37,39 @@ const Register = ({navigation}: Props) => {
   const [showBackground, setShowBackground] = useState(true);
   const [showModal, setShowModal] = useState(false);
   // const [newToken, setNewToken] = useState('eyJhbGciOiJIUzI1NiIsImtpZCI6ImI2NzE1ZTJmZjcxZDIyMjQ5ODk1MDAyMzY2ODMwNDc3Mjg2Nzg0ZTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiICIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9jbGlxZXRzLTRmY2U4IiwiYXVkIjoiY2xpcWV0cy00ZmNlOCIsImF1dGhfdGltZSI6MTY4MzM5NjE5NCwidXNlcl9pZCI6ImJiNTZhMTU5LTIyMjItNGU2ZC05OWI3LTk4ODNjMmE3MDlkYiIsInN1YiI6ImJiNTZhMTU5LTIyMjItNGU2ZC05OWI3LTk4ODNjMmE3MDlkYiIsImlhdCI6MTY4MzM5OTc4MSwiZXhwIjoxNjgzNDAzMzgxLCJwaG9uZV9udW1iZXIiOiIrMjM3NjU0MTMxMDI3IiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJwaG9uZSI6WyIrMjM3Njc1NDEzMTAyNyJdfSwic2lnbl9pbl9wcm92aWRlciI6InBob25lIn19.TDBKDbY9_xM0lH7HJjRPAqnLLiMd79D1CP-1sjN9UQU');
+  const [loading, setLoading] = useState(false);
 
   const changeBackground = async (now: any) => {
     setShowBackground(now);
   };
 
-  
+
   useEffect(() => {
     const onAuthStateChanged = (user: any) => {
       if (user) {
-        user
-          .getIdToken()
-          .then((token: React.SetStateAction<string>) =>
-            navigation.navigate('MainStack', {
-              screen: 'Sync',
-              params: {tokenObj: token},
-            }),
-          );
+        // navigation.navigate('MainStack');
+        user.getIdToken().then((token: string) =>
+          navigation.navigate('MainStack', {
+            screen: 'Sync',
+            params: {tokenObj: token},
+          }),
+        );
       }
     };
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
-  }, []);
+  }, [navigation]);
 
-  const login: any = async (phoneNumber: any) => {
-    console.log('====================================');
-    console.log({phoneNumber});
-    console.log('====================================');
+  const login: any = async () => {
+    setLoading(true);
     const confirmation: any = await auth().signInWithPhoneNumber(phoneNumber);
-    console.log('====================================');
-    console.log({confirmation});
-    console.log('====================================');
-    setConfirm(confirmation);
+    if (confirmation) {
+      setConfirm(confirmation);
+      setLoading(false);
+    }
   };
 
   const confirmCode = async () => {
-    console.log('in confirm code');
     try {
       await confirm.confirm(code).then((user: any) => {
         console.log('Code Activated');
@@ -163,11 +160,11 @@ const Register = ({navigation}: Props) => {
             </FormControl>
 
             <CustomButton
-              onPress={() => {
-                login(phoneNumber);
-              }}
+              onPress={login}
               btnText="Verify phone number"
               btnType={ButtonType.PRIMARY}
+              loading={loading}
+              disabled={!phoneNumber}
             />
             <CustomModal
               heading={'Connection failed'}
@@ -240,19 +237,14 @@ const Register = ({navigation}: Props) => {
           }}
         />
 
-        <Button
-          mt="3"
-          backgroundColor="#3935F4"
-          onPress={() => confirmCode()}
-          rounded="3xl"
-          py="3"
-          px="0"
-          ml="5"
-          width="45%">
-          <Text bold color="white" fontSize="md">
-            Confirm Code
-          </Text>
-        </Button>
+
+        <CustomButton
+          btnText={'Confirm code'}
+          btnType={ButtonType.PRIMARY}
+          onPress={confirmCode}
+          loading={loading}
+          disabled={!phoneNumber}
+        />
       </View>
     </TouchableWithoutFeedback>
   );

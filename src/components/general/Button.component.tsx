@@ -34,7 +34,7 @@ const CustomButton: React.FC<Props> = ({
         fontWeight="700"
         fontSize={'16px'}
         color={btnType === ButtonType.PRIMARY ? 'white' : 'primary.500'}>
-        {btnText}
+        {loading ? 'Please wait...' : btnText}
       </Text>
     </Button>
   );
