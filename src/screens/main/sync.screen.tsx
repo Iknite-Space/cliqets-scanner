@@ -151,14 +151,7 @@ const Sync = ({navigation, route}: any) => {
     getUser();
   }, []);
 
-  // try {
-  //   setStatus('loading')
-
-  // } catch (error) {
-  //   setStatus('failed')
-  // }finally{
-  //   setStatus('completed')
-  // }
+ 
   return (
     <View flex="1">
       <ImageBackground
