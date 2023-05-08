@@ -1,13 +1,17 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {CustomModal} from '../../components';
 import {ModalType} from '../../components/general/Modal.component';
 import {ButtonType} from '../../components/general/Button.component';
 
-export default function Scanner({navigation}: any) {
-  const [ticketState, SetTicketState] = useState('scanning');
+export default function Scanner({navigation, route}: any) {
+  const [showModal, setShowModal] = useState(false);
+  const [showInvalidModal, setShowInvalidModal] = useState(false);
+  const [validTicket, setValidTicket] = useState() as any;
+
+  const tickets = route.params?.tickets;
+
   const verifyTicket = async ticket => {
-    console.log('ticket id from state: ' + ticket);
     await fetch(
       `https://api.dev.cliqets.xyz/guest/purchased_tickets/${ticket}`,
       {
@@ -22,47 +26,53 @@ export default function Scanner({navigation}: any) {
       .then(data => (data.ok ? data.json() : data.json()))
       .then(data => {
         if (data.purcchase_ticket_id) {
-          SetTicketState('valid');
+          const ticketFound = tickets?.find(
+            (t: any) => t.purcchase_ticket_id === data.purcchase_ticket_id,
+          );
+          console.log('tickets: ', tickets);
+          console.log('data: ', data);
+          console.log('ticket found', ticketFound);
+          if (ticketFound) {
+            setValidTicket(ticketFound);
+            setShowModal(true);
+          } else {
+            setShowInvalidModal(true);
+          }
         } else {
-          SetTicketState('invalid');
+          setShowInvalidModal(true);
         }
       });
   };
   return (
     <>
-      {ticketState == 'valid' && (
-        <CustomModal
-          heading={'Ticket valid'}
-          showModal={true}
-          modalType={ModalType.SUCCESS}
-          setShowModal={() => {}}
-          description={'Ticket Valid'}
-          btnText={'Scan Ticket'}
-          btnType={ButtonType.PRIMARY}
-          onPress={() => {
-            navigation.navigate('Home');
-          }}
-        />
-      )}
+      <CustomModal
+        heading={'Valid ticket!'}
+        showModal={showModal}
+        modalType={ModalType.SUCCESS}
+        setShowModal={setShowModal}
+        description={`Ticket type:\t\t\t\t${validTicket?.ticket_type}\nOrder number:\t\t${validTicket?.order_no}\nTicket number:\t\t\t${validTicket?.ticket_no}\nSeat number:\t\t\t${validTicket?.seat_no}`}
+        btnText={'Scan Ticket'}
+        btnType={ButtonType.PRIMARY}
+        onPress={() => {
+          setShowModal(false);
+        }}
+      />
 
-      {ticketState == 'invalid' && (
-        <CustomModal
-          heading={'Ticket Invalid'}
-          showModal={true}
-          modalType={ModalType.ERROR}
-          setShowModal={() => {}}
-          description={'Ticket Invalid'}
-          btnText={'Scan Ticket'}
-          btnType={ButtonType.PRIMARY}
-          onPress={() => {
-            navigation.navigate('Home');
-          }}
-        />
-      )}
+      <CustomModal
+        heading={'Invalid ticket'}
+        showModal={showInvalidModal}
+        modalType={ModalType.ERROR}
+        setShowModal={setShowInvalidModal}
+        description={'This ticket is not valid for this event'}
+        btnText={'Scan Ticket'}
+        btnType={ButtonType.PRIMARY}
+        onPress={() => {
+          setShowInvalidModal(false);
+        }}
+      />
 
       <QRCodeScanner
         onRead={({data}) => {
-          console.log('ticket id: ', data);
           verifyTicket(data);
         }}
         reactivate={true}

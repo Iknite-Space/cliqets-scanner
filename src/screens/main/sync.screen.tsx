@@ -177,7 +177,7 @@ const Sync = ({navigation, route}: any) => {
           <Box rounded="full" backgroundColor="green.400" p="3"></Box>
         </Box>
 
-        {/* <Box mx="auto" mt="110%" alignItems="center">
+        <Box mx="auto" mt="110%" alignItems="center">
           {!(showModal || showFailureModal) ? (
             <>
               <Image
@@ -236,7 +236,7 @@ const Sync = ({navigation, route}: any) => {
               onPress={() => {}}
             />
           </Box>
-        </Box> */}
+        </Box>
 
         {!(showModal || showFailureModal) ? (
           <>

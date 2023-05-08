@@ -23,6 +23,7 @@ export default function Event({
   description,
   location,
   date,
+  id,
 }: any) {
   // let title = title;
   // let description = description;
@@ -35,8 +36,7 @@ export default function Event({
     <Box alignItems="center">
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('Home');
-          console.log('Home clicked');
+          navigation.navigate('Home', {event_id: id});
         }}>
         <Box
           maxW="80"

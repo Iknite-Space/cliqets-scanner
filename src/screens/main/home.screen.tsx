@@ -4,36 +4,61 @@ import {
   Pressable,
   TouchableWithoutFeedback,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Button, Image, Text, View} from 'native-base';
+import {useRoute} from '@react-navigation/native';
 
-export default function Home({navigation}: any) {
+export default function Home({navigation, route}: any) {
   const downloadGuestList = () => {};
-  const verifyAssigments = async () => {
-    await fetch(
-      'https://api.dev.cliqets.xyz/validator/events?user_id=CZZHRog4j4c129cl9HaCbNOBZFA2&start_key=0&count=10',
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ1paSFJvZzRqNGMxMjljbDlIYUNiTk9CWkZBMiJ9.SqjofIeuKAhLuoFhYhS6ZB2L03bBFSeZAD5MAhVuWWU',
-        },
-      },
-    )
-      .then(data => (data.ok ? data.json() : data.json()))
-      .then(data => {
-        console.log(data);
-      });
-  };
+  const [tickets, setTickets] = useState([]);
 
   useEffect(() => {
-    const events = verifyAssigments();
-    console.log(events);
-    // events.then(async () => {
+    const getTickets = async () => {
+      await fetch(
+        `https://api.dev.cliqets.xyz/tickets/${route.params.event_id}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ1paSFJvZzRqNGMxMjljbDlIYUNiTk9CWkZBMiJ9.SqjofIeuKAhLuoFhYhS6ZB2L03bBFSeZAD5MAhVuWWU',
+          },
+        },
+      )
+        .then(data => (data.ok ? data.json() : data.json()))
+        .then(data => {
+          if (data) {
+            setTickets(data);
+          }
+        });
+    };
+    getTickets();
+  }, [route.params?.event_id]);
+  // const verifyAssigments = async () => {
+  //   await fetch(
+  //     'https://api.dev.cliqets.xyz/validator/events?user_id=CZZHRog4j4c129cl9HaCbNOBZFA2&start_key=0&count=10',
+  //     {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization:
+  //           'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ1paSFJvZzRqNGMxMjljbDlIYUNiTk9CWkZBMiJ9.SqjofIeuKAhLuoFhYhS6ZB2L03bBFSeZAD5MAhVuWWU',
+  //       },
+  //     },
+  //   )
+  //     .then(data => (data.ok ? data.json() : data.json()))
+  //     .then(data => {
+  //       console.log('ticket data:',data);
+  //     });
+  // };
 
-    // });
-  }, []);
+  // useEffect(() => {
+  //   const events = verifyAssigments();
+  //   console.log(events);
+  //   // events.then(async () => {
+
+  //   // });
+  // }, []);
 
   return (
     <TouchableWithoutFeedback
@@ -85,7 +110,7 @@ export default function Home({navigation}: any) {
             py="4"
             mt="3"
             mb="10"
-            onPress={() => navigation.navigate('Scanner')}>
+            onPress={() => navigation.navigate('Scanner', {tickets})}>
             <Text bold color="white" fontSize="lg">
               Scan Tickets
             </Text>
