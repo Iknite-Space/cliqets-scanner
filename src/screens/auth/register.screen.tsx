@@ -60,13 +60,7 @@ const Register = ({navigation}: Props) => {
 
   const login: any = async () => {
     setLoading(true);
-    console.log('====================================');
-    console.log({phoneNumber});
-    console.log('====================================');
     const confirmation: any = await auth().signInWithPhoneNumber(phoneNumber);
-    // console.log('====================================');
-    console.log({confirmation});
-    // console.log('====================================');
     if (confirmation) {
       setConfirm(confirmation);
       setLoading(false);
@@ -76,12 +70,11 @@ const Register = ({navigation}: Props) => {
   const confirmCode = async () => {
     try {
       await confirm.confirm(code).then((user: any) => {
-        console.log('====================================');
         console.log('Code Activated');
         console.log('====================================');
         // const token = user.getIdToken()
         console.log('====================================');
-        console.log(user);
+        console.log({user});
         console.log('====================================');
         navigation.navigate('MainStack');
       });
@@ -236,19 +229,7 @@ const Register = ({navigation}: Props) => {
           }}
         />
 
-        {/* <Button
-          mt="3"
-          backgroundColor="#3935F4"
-          onPress={() => confirmCode()}
-          rounded="3xl"
-          py="3"
-          px="0"
-          ml="5"
-          width="45%">
-          <Text bold color="white" fontSize="md">
-            Confirm Code
-          </Text>
-        </Button> */}
+
         <CustomButton
           btnText={'Confirm code'}
           btnType={ButtonType.PRIMARY}

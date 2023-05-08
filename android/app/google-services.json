@@ -7,43 +7,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:318581707378:android:c13ba037ce42e442c6a8eb",
-        "android_client_info": {
-          "package_name": "com.cliqetsmobile"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "318581707378-4ih40mn0quo00t1d05n94dlpc29jf8nv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cliqetsmobile",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "318581707378-jlat2hru36qsq00glbks354rkimjuh2l.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBxZhzqpaWXQQZafou6_NqYzO-q05cVshs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "318581707378-jlat2hru36qsq00glbks354rkimjuh2l.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:318581707378:android:ff9f66071c9dcc78c6a8eb",
         "android_client_info": {
           "package_name": "com.cliquetsmobile"
@@ -58,35 +21,6 @@
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
-        {
-          "client_id": "318581707378-jlat2hru36qsq00glbks354rkimjuh2l.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBxZhzqpaWXQQZafou6_NqYzO-q05cVshs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "318581707378-jlat2hru36qsq00glbks354rkimjuh2l.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:318581707378:android:32e9c23da09b3e72c6a8eb",
-        "android_client_info": {
-          "package_name": "com.frostbyte_45.cliqetsmobile"
-        }
-      },
-      "oauth_client": [
         {
           "client_id": "318581707378-jlat2hru36qsq00glbks354rkimjuh2l.apps.googleusercontent.com",
           "client_type": 3

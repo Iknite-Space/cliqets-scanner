@@ -28,18 +28,23 @@ type Props = {
   navigation: any;
 };
 
-const Sync = ({ navigation, route }: any) => {
+const Sync = ({navigation, route}: any) => {
   const [showModal, setShowModal] = useState(false);
   const [showLogo, setShowLogo] = useState(true);
   const [showFailureModal, setShowFailureModal] = useState(false);
   const [status, setStatus] = useState('');
 
-  const token = route.params.tokenObj
+  const token = route.params.tokenObj;
   const decodedToken: any = jwt_decode(token);
   const userId = decodedToken.user_id;
+  const phoneNumber = decodedToken.phone_number;
+
+  console.log('====================================');
+  console.log(decodedToken);
+  console.log('====================================');
 
   let progress = 0;
-  let Events: any = null
+  let Events: any = null;
 
   const progressLoading = setInterval(() => {
     if (status === 'completed') {
@@ -50,49 +55,98 @@ const Sync = ({ navigation, route }: any) => {
   }, 1000);
 
   useEffect(() => {
-    
+    const getUser = async () => {
+      const resposnse = await fetch(
+        `https://api.dev.cliqets.xyz/user/${userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+        .then(async data => {
+          if (data.status == 200) {
+            console.log('====================================');
+            console.log('user exists');
+            console.log('====================================');
+            fetchValidator();
+          } else if (data.status == 401) {
+            console.log('====================================');
+            console.log({data});
+            console.log('====================================');
+            const userResponse = await fetch(
+              `https://api.dev.cliqets.xyz/user`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  user_id: userId,
+                  phone_number: phoneNumber,
+                }),
+              },
+            );
+            console.log('====================================');
+            console.log('Created User');
+            console.log('====================================');
+          }
+        })
+        .then(() => {
+          fetchValidator();
+        });
+    };
+
     const fetchValidator = async () => {
-      const response = await fetch(`https://api.dev.cliqets.xyz/validator/verify_assignments/${userId}`, {
-        method: "GET",
-        headers:{
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      }).then(async (data) => {
+      const response = await fetch(
+        `https://api.dev.cliqets.xyz/validator/verify_assignments/${userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      ).then(async data => {
         if (data.status == 200) {
           console.log('====================================');
-          console.log("Validator Verified");
-          const eventsResponse = await fetch(`https://api.dev.cliqets.xyz/validator/events?user_id=${userId}&start_key=0&count=10`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`
-            }
-          }).then((data) => {
-            return data.json();
-          }).then((newData) => {
-            console.log('====================================');
-            console.log({newData});
-            console.log('====================================');
-            // navigation.navigate("Events", {EventsObj: newData})
-            Events = newData;
-          })
+          console.log('Validator Verified');
+          const eventsResponse = await fetch(
+            `https://api.dev.cliqets.xyz/validator/events?user_id=${userId}&start_key=0&count=10`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          )
+            .then(data => {
+              return data.json();
+            })
+            .then(newData => {
+              console.log('====================================');
+              console.log({newData});
+              console.log('====================================');
+              // navigation.navigate("Events", {EventsObj: newData})
+              Events = newData;
+            });
           console.log('====================================');
         } else {
           console.log('====================================');
           console.log(data);
           console.log('====================================');
         }
-      })
-    }
+      });
+    };
 
-    fetchValidator()
-  }, []) 
-
+    getUser();
+  }, []);
 
   // try {
   //   setStatus('loading')
-  //   fetchValidator();
 
   // } catch (error) {
   //   setStatus('failed')
@@ -155,14 +209,12 @@ const Sync = ({ navigation, route }: any) => {
               heading={'Success'}
               showModal={showModal}
               modalType={ModalType.SUCCESS}
-              setShowModal={
-                setShowModal
-            }
+              setShowModal={setShowModal}
               description={'Data Synchronized'}
               btnText={'Continue'}
               btnType={ButtonType.PRIMARY}
               onPress={() => {
-                navigation.navigate("Events", {EventsObj: Events});
+                navigation.navigate('Events', {EventsObj: Events});
               }}
             />
 
@@ -177,8 +229,7 @@ const Sync = ({ navigation, route }: any) => {
               heading={'Connection failed'}
               showModal={showFailureModal}
               modalType={ModalType.ERROR}
-              setShowModal={setShowFailureModal
-            }
+              setShowModal={setShowFailureModal}
               description={'Check your internet and try again'}
               btnText={'Try again'}
               btnType={ButtonType.PRIMARY}
@@ -197,7 +248,6 @@ const Sync = ({ navigation, route }: any) => {
                 colorScheme="primary"
                 mb="4"
               />
-              {/* <Progress.Bar progress={0.3} width={200} height={1} color="#3935F4" animationConfig={{bounciness: 1}} /> */}
             </Box>
           </>
         ) : showModal ? (
@@ -210,7 +260,6 @@ const Sync = ({ navigation, route }: any) => {
                 colorScheme="primary"
                 mb="4"
               />
-              {/* <Progress.Bar progress={0.3} width={200} height={1} color="#3935F4" /> */}
             </Box>
           </>
         ) : (
