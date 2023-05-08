@@ -36,27 +36,26 @@ const Register = ({navigation}: Props) => {
   const [code, setCode] = useState('');
   const [showBackground, setShowBackground] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [token, setToken] = useState('');
+  // const [newToken, setNewToken] = useState('eyJhbGciOiJIUzI1NiIsImtpZCI6ImI2NzE1ZTJmZjcxZDIyMjQ5ODk1MDAyMzY2ODMwNDc3Mjg2Nzg0ZTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiICIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9jbGlxZXRzLTRmY2U4IiwiYXVkIjoiY2xpcWV0cy00ZmNlOCIsImF1dGhfdGltZSI6MTY4MzM5NjE5NCwidXNlcl9pZCI6ImJiNTZhMTU5LTIyMjItNGU2ZC05OWI3LTk4ODNjMmE3MDlkYiIsInN1YiI6ImJiNTZhMTU5LTIyMjItNGU2ZC05OWI3LTk4ODNjMmE3MDlkYiIsImlhdCI6MTY4MzM5OTc4MSwiZXhwIjoxNjgzNDAzMzgxLCJwaG9uZV9udW1iZXIiOiIrMjM3NjU0MTMxMDI3IiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJwaG9uZSI6WyIrMjM3Njc1NDEzMTAyNyJdfSwic2lnbl9pbl9wcm92aWRlciI6InBob25lIn19.TDBKDbY9_xM0lH7HJjRPAqnLLiMd79D1CP-1sjN9UQU');
 
   const changeBackground = async (now: any) => {
     setShowBackground(now);
   };
 
-  const onAuthStateChanged = (user: any) => {
-    if (user) {
-      // navigation.navigate('MainStack');
-      user
-        .getIdToken()
-        .then((token: React.SetStateAction<string>) =>
-          navigation.navigate('MainStack', {
-            screen: 'Sync',
-            params: {tokenObj: token},
-          }),
-        );
-    }
-  };
-
+  
   useEffect(() => {
+    const onAuthStateChanged = (user: any) => {
+      if (user) {
+        user
+          .getIdToken()
+          .then((token: React.SetStateAction<string>) =>
+            navigation.navigate('MainStack', {
+              screen: 'Sync',
+              params: {tokenObj: token},
+            }),
+          );
+      }
+    };
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
   }, []);
@@ -122,8 +121,6 @@ const Register = ({navigation}: Props) => {
                   ml="5"
                   mt="3"
                   alt="#"
-                  // w="167px"
-                  // h="48px"
                 />
               </Box>
             </>

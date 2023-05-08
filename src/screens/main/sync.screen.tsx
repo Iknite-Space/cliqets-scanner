@@ -40,7 +40,8 @@ const Sync = ({navigation, route}: any) => {
   const phoneNumber = decodedToken.phone_number;
 
   console.log('====================================');
-  console.log(decodedToken);
+  console.log({decodedToken});
+  console.log({userId})
   console.log('====================================');
 
   let progress = 0;
@@ -67,14 +68,14 @@ const Sync = ({navigation, route}: any) => {
         },
       )
         .then(async data => {
-          if (data.status == 200) {
+          if (data.ok) {
             console.log('====================================');
             console.log('user exists');
             console.log('====================================');
             fetchValidator();
-          } else if (data.status == 401) {
+          } else {
             console.log('====================================');
-            console.log({data});
+            console.log({userNoDey: data});
             console.log('====================================');
             const userResponse = await fetch(
               `https://api.dev.cliqets.xyz/user`,
@@ -82,16 +83,21 @@ const Sync = ({navigation, route}: any) => {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                  user_id: userId,
-                  phone_number: phoneNumber,
+                  "user_id": `${userId}`,
+                  "phone_number": `${phoneNumber}`,
                 }),
               },
-            );
-            console.log('====================================');
-            console.log('Created User');
-            console.log('====================================');
+            ).then(async newUser => {
+              if (newUser.ok) {
+                console.log('====================================');
+                const responseUser = newUser.json()
+                console.log({responseUser});
+                console.log('====================================');
+              }
+            });
           }
         })
         .then(() => {
@@ -128,7 +134,7 @@ const Sync = ({navigation, route}: any) => {
             })
             .then(newData => {
               console.log('====================================');
-              console.log({newData});
+              console.log({events: newData});
               console.log('====================================');
               // navigation.navigate("Events", {EventsObj: newData})
               Events = newData;
@@ -136,7 +142,7 @@ const Sync = ({navigation, route}: any) => {
           console.log('====================================');
         } else {
           console.log('====================================');
-          console.log(data);
+          console.log({noEvent: data});
           console.log('====================================');
         }
       });
@@ -183,12 +189,8 @@ const Sync = ({navigation, route}: any) => {
             <>
               <Image
                 source={require('../../assets/Cliqkets_logo.png')}
-                //   mx="auto"
                 mt="3"
                 alt="#"
-
-                // w="167px"
-                // h="48px"
               />
               <Text fontSize="md" color="white" mb="2" mt="5">
                 Synchronizing with Server ...
@@ -267,19 +269,7 @@ const Sync = ({navigation, route}: any) => {
           </>
         ) : (
           <>
-            <Button
-              rounded="full"
-              py="2"
-              px="0.5"
-              backgroundColor="#3935F400"
-              w="50%"
-              mx="auto"
-              borderColor="#3935F4"
-              borderWidth="2">
-              <Text bold color="#3935F4">
-                Get Help
-              </Text>
-            </Button>
+            <CustomButton btnText="Get Help" btnType={ButtonType.SECONDARY} />
           </>
         )}
       </ImageBackground>
