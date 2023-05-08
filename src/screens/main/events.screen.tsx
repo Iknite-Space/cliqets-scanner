@@ -13,9 +13,6 @@ const Events = ({navigation, route}: any) => {
     setEvents(route.params.EventsObj);
   }, []);
 
-  console.log('====================================');
-  console.log({events});
-  console.log('====================================');
 
   return (
     <ScrollView>

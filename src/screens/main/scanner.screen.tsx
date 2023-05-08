@@ -16,8 +16,7 @@ export default function Scanner({navigation, route}: any) {
   useEffect(() => {
     const onAuthStateChanged = (user: any) => {
       if (user) {
-        console.log(user.userId);
-        // navigation.navigate('MainStack');
+
         user.getIdToken().then((t: string) => {
           setToken(t);
         });
@@ -27,7 +26,6 @@ export default function Scanner({navigation, route}: any) {
     return subscriber;
   }, [navigation]);
 
-  console.log({token});
   const verifyTicket = async ticket => {
     await fetch(
       `https://api.dev.cliqets.xyz/guest/purchased_tickets/${ticket}`,
@@ -45,9 +43,6 @@ export default function Scanner({navigation, route}: any) {
           const ticketFound = tickets?.find(
             (t: any) => t.purcchase_ticket_id === data.purcchase_ticket_id,
           );
-          console.log('tickets: ', tickets);
-          console.log('data: ', data);
-          console.log('ticket found', ticketFound);
           if (ticketFound) {
             setValidTicket(ticketFound);
             setShowModal(true);

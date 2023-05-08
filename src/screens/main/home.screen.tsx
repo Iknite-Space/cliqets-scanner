@@ -34,31 +34,7 @@ export default function Home({navigation, route}: any) {
     };
     getTickets();
   }, [route.params?.event_id]);
-  // const verifyAssigments = async () => {
-  //   await fetch(
-  //     'https://api.dev.cliqets.xyz/validator/events?user_id=CZZHRog4j4c129cl9HaCbNOBZFA2&start_key=0&count=10',
-  //     {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization:
-  //           'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ1paSFJvZzRqNGMxMjljbDlIYUNiTk9CWkZBMiJ9.SqjofIeuKAhLuoFhYhS6ZB2L03bBFSeZAD5MAhVuWWU',
-  //       },
-  //     },
-  //   )
-  //     .then(data => (data.ok ? data.json() : data.json()))
-  //     .then(data => {
-  //       console.log('ticket data:',data);
-  //     });
-  // };
 
-  // useEffect(() => {
-  //   const events = verifyAssigments();
-  //   console.log(events);
-  //   // events.then(async () => {
-
-  //   // });
-  // }, []);
 
   return (
     <TouchableWithoutFeedback
