@@ -1,5 +1,5 @@
 import Event from '../../components/Event';
-import {TouchableOpacity} from 'react-native';
+import {TextBase, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View, Text, Button} from 'native-base';
 type Props = {
@@ -26,22 +26,30 @@ const Events = ({navigation, route}: any) => {
         </Text>
       </View>
 
-      <View>
-        {events?.map(event => {
-          return (
-            <Event
-              key={event?.event_id}
-              id={event?.event_id}
-              imgsrc={event?.cover_photo}
-              title={event?.title}
-              description={event?.description}
-              location={event?.venue}
-              date={event?.date}
-              navigation={navigation}
-            />
-          );
-        })}
-      </View>
+      {events ? (
+        <View>
+          {events?.map(event => {
+            return (
+              <Event
+                key={event?.event_id}
+                id={event?.event_id}
+                imgsrc={event?.cover_photo}
+                title={event?.title}
+                description={event?.description}
+                location={event?.venue}
+                date={event?.date}
+                navigation={navigation}
+              />
+            );
+          })}
+        </View>
+      ) : (
+        <>
+          <View>
+            <Text>You Are not a validator for any event ...</Text>
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 };

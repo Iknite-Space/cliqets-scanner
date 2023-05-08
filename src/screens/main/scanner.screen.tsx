@@ -3,14 +3,31 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import {CustomModal} from '../../components';
 import {ModalType} from '../../components/general/Modal.component';
 import {ButtonType} from '../../components/general/Button.component';
+import auth from '@react-native-firebase/auth';
 
 export default function Scanner({navigation, route}: any) {
   const [showModal, setShowModal] = useState(false);
   const [showInvalidModal, setShowInvalidModal] = useState(false);
   const [validTicket, setValidTicket] = useState() as any;
+  const [token, setToken] = useState();
 
   const tickets = route.params?.tickets;
 
+  useEffect(() => {
+    const onAuthStateChanged = (user: any) => {
+      if (user) {
+        console.log(user.userId);
+        // navigation.navigate('MainStack');
+        user.getIdToken().then((t: string) => {
+          setToken(t);
+        });
+      }
+    };
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, [navigation]);
+
+  console.log({token});
   const verifyTicket = async ticket => {
     await fetch(
       `https://api.dev.cliqets.xyz/guest/purchased_tickets/${ticket}`,
@@ -18,8 +35,7 @@ export default function Scanner({navigation, route}: any) {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ1paSFJvZzRqNGMxMjljbDlIYUNiTk9CWkZBMiJ9.SqjofIeuKAhLuoFhYhS6ZB2L03bBFSeZAD5MAhVuWWU',
+          Authorization: `Bearer ${token}`,
         },
       },
     )
