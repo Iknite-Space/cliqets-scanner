@@ -153,7 +153,6 @@ const Sync = ({navigation, route}: any) => {
 
   // try {
   //   setStatus('loading')
-  //   fetchValidator();
 
   // } catch (error) {
   //   setStatus('failed')
@@ -251,7 +250,6 @@ const Sync = ({navigation, route}: any) => {
                 colorScheme="primary"
                 mb="4"
               />
-              {/* <Progress.Bar progress={0.3} width={200} height={1} color="#3935F4" animationConfig={{bounciness: 1}} /> */}
             </Box>
           </>
         ) : showModal ? (
@@ -264,7 +262,6 @@ const Sync = ({navigation, route}: any) => {
                 colorScheme="primary"
                 mb="4"
               />
-              {/* <Progress.Bar progress={0.3} width={200} height={1} color="#3935F4" /> */}
             </Box>
           </>
         ) : (
