@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {
   Animated,
+  FlexAlignType,
   ImageBackground,
   Keyboard,
   Pressable,
@@ -21,20 +22,29 @@ import {
 import {CustomButton, CustomModal} from '../../components';
 import {ButtonType} from '../../components/general/Button.component';
 import {ModalType} from '../../components/general/Modal.component';
+import jwt_decode from 'jwt-decode';
 
 type Props = {
   navigation: any;
 };
 
-const Sync = ({navigation}: Props, {route}: any) => {
+const Sync = ({navigation, route}: any) => {
   const [showModal, setShowModal] = useState(false);
   const [showLogo, setShowLogo] = useState(true);
   const [showFailureModal, setShowFailureModal] = useState(false);
   const [status, setStatus] = useState('');
 
-  // let token = route.params.tokenObj;
+  const token = route.params.tokenObj;
+  const decodedToken: any = jwt_decode(token);
+  const userId = decodedToken.user_id;
+  const phoneNumber = decodedToken.phone_number;
+
+  console.log('====================================');
+  console.log(decodedToken);
+  console.log('====================================');
 
   let progress = 0;
+  let Events: any = null;
 
   const progressLoading = setInterval(() => {
     if (status === 'completed') {
@@ -44,12 +54,95 @@ const Sync = ({navigation}: Props, {route}: any) => {
     }
   }, 1000);
 
-  const switchScreen = () => {
-    setInterval(() => navigation.navigate('AuthStack'), 5000);
-  };
-
   useEffect(() => {
-    switchScreen();
+    const getUser = async () => {
+      const resposnse = await fetch(
+        `https://api.dev.cliqets.xyz/user/${userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+        .then(async data => {
+          if (data.status == 200) {
+            console.log('====================================');
+            console.log('user exists');
+            console.log('====================================');
+            fetchValidator();
+          } else if (data.status == 401) {
+            console.log('====================================');
+            console.log({data});
+            console.log('====================================');
+            const userResponse = await fetch(
+              `https://api.dev.cliqets.xyz/user`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  user_id: userId,
+                  phone_number: phoneNumber,
+                }),
+              },
+            );
+            console.log('====================================');
+            console.log('Created User');
+            console.log('====================================');
+          }
+        })
+        .then(() => {
+          fetchValidator();
+        });
+    };
+
+    const fetchValidator = async () => {
+      const response = await fetch(
+        `https://api.dev.cliqets.xyz/validator/verify_assignments/${userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      ).then(async data => {
+        if (data.status == 200) {
+          console.log('====================================');
+          console.log('Validator Verified');
+          const eventsResponse = await fetch(
+            `https://api.dev.cliqets.xyz/validator/events?user_id=${userId}&start_key=0&count=10`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          )
+            .then(data => {
+              return data.json();
+            })
+            .then(newData => {
+              console.log('====================================');
+              console.log({newData});
+              console.log('====================================');
+              // navigation.navigate("Events", {EventsObj: newData})
+              Events = newData;
+            });
+          console.log('====================================');
+        } else {
+          console.log('====================================');
+          console.log(data);
+          console.log('====================================');
+        }
+      });
+    };
+
+    getUser();
   }, []);
 
   // try {
@@ -120,7 +213,9 @@ const Sync = ({navigation}: Props, {route}: any) => {
               description={'Data Synchronized'}
               btnText={'Continue'}
               btnType={ButtonType.PRIMARY}
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate('Events', {EventsObj: Events});
+              }}
             />
 
             <CustomButton
