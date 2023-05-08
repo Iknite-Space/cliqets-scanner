@@ -36,40 +36,38 @@ const Register = ({navigation}: Props) => {
   const [code, setCode] = useState('');
   const [showBackground, setShowBackground] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const changeBackground = async (now: any) => {
     setShowBackground(now);
   };
 
-  const onAuthStateChanged = (user: any) => {
-    if (user) {
-      // navigation.navigate('MainStack');
-      user.getIdToken().then((token: React.SetStateAction<string>) =>
-        navigation.navigate('MainStack', {
-          screen: 'Sync',
-          params: {tokenObj: token},
-        }),
-      );
+  useEffect(() => {
+    const onAuthStateChanged = (user: any) => {
+      if (user) {
+        // navigation.navigate('MainStack');
+        user.getIdToken().then((token: string) =>
+          navigation.navigate('MainStack', {
+            screen: 'Sync',
+            params: {tokenObj: token},
+          }),
+        );
+      }
+    };
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, [navigation]);
+
+  const login: any = async () => {
+    setLoading(true);
+    const confirmation: any = await auth().signInWithPhoneNumber(phoneNumber);
+    if (confirmation) {
+      setConfirm(confirmation);
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
-  }, []);
-
-  const login: any = async (phoneNumber: any) => {
-    console.log({phoneNumber});
-    const confirmation: any = await auth().signInWithPhoneNumber(phoneNumber);
-    console.log('====================================');
-    console.log({confirmation});
-    console.log('====================================');
-    setConfirm(confirmation);
-  };
-
   const confirmCode = async () => {
-    console.log('in confirm code');
     try {
       await confirm.confirm(code).then((user: any) => {
         console.log('Code Activated');
@@ -154,11 +152,11 @@ const Register = ({navigation}: Props) => {
             </FormControl>
 
             <CustomButton
-              onPress={() => {
-                login(phoneNumber);
-              }}
+              onPress={login}
               btnText="Verify phone number"
               btnType={ButtonType.PRIMARY}
+              loading={loading}
+              disabled={!phoneNumber}
             />
             <CustomModal
               heading={'Connection failed'}
@@ -231,19 +229,14 @@ const Register = ({navigation}: Props) => {
           }}
         />
 
-        <Button
-          mt="3"
-          backgroundColor="#3935F4"
-          onPress={() => confirmCode()}
-          rounded="3xl"
-          py="3"
-          px="0"
-          ml="5"
-          width="45%">
-          <Text bold color="white" fontSize="md">
-            Confirm Code
-          </Text>
-        </Button>
+
+        <CustomButton
+          btnText={'Confirm code'}
+          btnType={ButtonType.PRIMARY}
+          onPress={confirmCode}
+          loading={loading}
+          disabled={!phoneNumber}
+        />
       </View>
     </TouchableWithoutFeedback>
   );
