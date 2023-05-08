@@ -45,14 +45,12 @@ const Register = ({navigation}: Props) => {
   const onAuthStateChanged = (user: any) => {
     if (user) {
       // navigation.navigate('MainStack');
-      user
-        .getIdToken()
-        .then((token: React.SetStateAction<string>) =>
-          navigation.navigate('MainStack', {
-            screen: 'Sync',
-            params: {tokenObj: token},
-          }),
-        );
+      user.getIdToken().then((token: React.SetStateAction<string>) =>
+        navigation.navigate('MainStack', {
+          screen: 'Sync',
+          params: {tokenObj: token},
+        }),
+      );
     }
   };
 
@@ -62,9 +60,7 @@ const Register = ({navigation}: Props) => {
   }, []);
 
   const login: any = async (phoneNumber: any) => {
-    console.log('====================================');
     console.log({phoneNumber});
-    console.log('====================================');
     const confirmation: any = await auth().signInWithPhoneNumber(phoneNumber);
     console.log('====================================');
     console.log({confirmation});
@@ -73,9 +69,9 @@ const Register = ({navigation}: Props) => {
   };
 
   const confirmCode = async () => {
+    console.log('in confirm code');
     try {
       await confirm.confirm(code).then((user: any) => {
-        console.log('====================================');
         console.log('Code Activated');
         console.log('====================================');
         // const token = user.getIdToken()
