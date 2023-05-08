@@ -44,24 +44,26 @@ const Register = ({navigation}: Props) => {
 
   
   useEffect(() => {
-    const onAuthStateChanged = (user: any) => {
-      if (user) {
-        user
-          .getIdToken()
-          .then((token: React.SetStateAction<string>) =>
-            navigation.navigate('MainStack', {
-              screen: 'Sync',
-              params: {tokenObj: token},
-            }),
-          );
-      }
-    };
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
+    // const onAuthStateChanged = (user: any) => {
+    //   if (user) {
+    //     user
+    //       .getIdToken()
+    //       .then((token: React.SetStateAction<string>) =>
+    //         navigation.navigate('MainStack', {
+    //           screen: 'Sync',
+    //           params: {tokenObj: token},
+    //         }),
+    //       );
+    //   }
+    // };
+    // const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    // return subscriber;
   }, []);
 
   const login: any = async (phoneNumber: any) => {
+    console.log('====================================');
     console.log({phoneNumber});
+    console.log('====================================');
     const confirmation: any = await auth().signInWithPhoneNumber(phoneNumber);
     console.log('====================================');
     console.log({confirmation});
