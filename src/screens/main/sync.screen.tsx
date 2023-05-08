@@ -42,7 +42,7 @@ const Sync = ({navigation, route}: any) => {
 
   console.log('====================================');
   console.log({decodedToken});
-  console.log({userId})
+  console.log({userId});
   console.log('====================================');
 
   let progress = 0;
@@ -83,17 +83,17 @@ const Sync = ({navigation, route}: any) => {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`
+                  Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                  "user_id": `${userId}`,
-                  "phone_number": `${phoneNumber}`,
+                  user_id: `${userId}`,
+                  phone_number: `${phoneNumber}`,
                 }),
               },
             ).then(async newUser => {
               if (newUser.ok) {
                 console.log('====================================');
-                const responseUser = newUser.json()
+                const responseUser = newUser.json();
                 console.log({responseUser});
                 console.log('====================================');
               }
@@ -151,7 +151,6 @@ const Sync = ({navigation, route}: any) => {
     getUser();
   }, []);
 
- 
   return (
     <View flex="1">
       <ImageBackground
