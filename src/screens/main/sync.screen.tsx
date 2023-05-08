@@ -33,6 +33,7 @@ const Sync = ({navigation, route}: any) => {
   const [showLogo, setShowLogo] = useState(true);
   const [showFailureModal, setShowFailureModal] = useState(false);
   const [status, setStatus] = useState('');
+  const [events, setEvents] = useState();
 
   const token = route.params.tokenObj;
   const decodedToken: any = jwt_decode(token);
@@ -45,7 +46,6 @@ const Sync = ({navigation, route}: any) => {
   console.log('====================================');
 
   let progress = 0;
-  let Events: any = null;
 
   const progressLoading = setInterval(() => {
     if (status === 'completed') {
@@ -137,7 +137,7 @@ const Sync = ({navigation, route}: any) => {
               console.log({events: newData});
               console.log('====================================');
               // navigation.navigate("Events", {EventsObj: newData})
-              Events = newData;
+              setEvents(newData);
             });
           console.log('====================================');
         } else {
@@ -216,7 +216,7 @@ const Sync = ({navigation, route}: any) => {
               btnText={'Continue'}
               btnType={ButtonType.PRIMARY}
               onPress={() => {
-                navigation.navigate('Events', {EventsObj: Events});
+                navigation.navigate('Events', {EventsObj: events});
               }}
             />
 

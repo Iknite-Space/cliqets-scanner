@@ -44,20 +44,20 @@ const Register = ({navigation}: Props) => {
 
   
   useEffect(() => {
-    // const onAuthStateChanged = (user: any) => {
-    //   if (user) {
-    //     user
-    //       .getIdToken()
-    //       .then((token: React.SetStateAction<string>) =>
-    //         navigation.navigate('MainStack', {
-    //           screen: 'Sync',
-    //           params: {tokenObj: token},
-    //         }),
-    //       );
-    //   }
-    // };
-    // const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    // return subscriber;
+    const onAuthStateChanged = (user: any) => {
+      if (user) {
+        user
+          .getIdToken()
+          .then((token: React.SetStateAction<string>) =>
+            navigation.navigate('MainStack', {
+              screen: 'Sync',
+              params: {tokenObj: token},
+            }),
+          );
+      }
+    };
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
   }, []);
 
   const login: any = async (phoneNumber: any) => {
@@ -77,11 +77,19 @@ const Register = ({navigation}: Props) => {
       await confirm.confirm(code).then((user: any) => {
         console.log('Code Activated');
         console.log('====================================');
-        // const token = user.getIdToken()
         console.log('====================================');
         console.log({user});
         console.log('====================================');
-        navigation.navigate('MainStack');
+        if (user) {
+          user
+            .user.getIdToken()
+            .then((token: React.SetStateAction<string>) =>
+              navigation.navigate('MainStack', {
+                screen: 'Sync',
+                params: {tokenObj: token},
+              }),
+            );
+        }
       });
     } catch (error) {
       console.log('Invalid Code.');
