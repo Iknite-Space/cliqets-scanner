@@ -40,73 +40,63 @@ const Sync = ({navigation, route}: any) => {
   const userId = decodedToken.user_id;
   const phoneNumber = decodedToken.phone_number;
 
-  console.log('====================================');
-  console.log({decodedToken});
-  console.log({userId});
-  console.log('====================================');
+  const [progress, setProgress] = useState(0);
 
-  let progress = 0;
-
-  const progressLoading = setInterval(() => {
-    if (status === 'completed') {
-      progress = 100;
-    } else if (progress < 80 && status === 'loading') {
-      progress++;
-    }
-  }, 1000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (progress < 100) {
+        if (status === 'completed') {
+          setProgress(100);
+        } else if (status === 'loading' && progress < 80) {
+          setProgress(progress + 0.25);
+        }
+      }
+    }, 250);
+    return () => clearInterval(interval);
+  }, [progress, status]);
 
   useEffect(() => {
     const getUser = async () => {
-      const resposnse = await fetch(
-        `https://api.dev.cliqets.xyz/user/${userId}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
+      fetch(`https://api.dev.cliqets.xyz/user/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
-      )
+      })
         .then(async data => {
           if (data.ok) {
-            console.log('====================================');
-            console.log('user exists');
-            console.log('====================================');
             fetchValidator();
           } else {
-            console.log('====================================');
-            console.log({userNoDey: data});
-            console.log('====================================');
-            const userResponse = await fetch(
-              `https://api.dev.cliqets.xyz/user`,
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                  user_id: `${userId}`,
-                  phone_number: `${phoneNumber}`,
-                }),
+            fetch(`https://api.dev.cliqets.xyz/user`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
               },
-            ).then(async newUser => {
+              body: JSON.stringify({
+                user_id: `${userId}`,
+                phone_number: `${phoneNumber}`,
+              }),
+            }).then(async newUser => {
               if (newUser.ok) {
-                console.log('====================================');
                 const responseUser = newUser.json();
-                console.log({responseUser});
-                console.log('====================================');
               }
             });
           }
         })
         .then(() => {
           fetchValidator();
+        })
+        .catch(error => {
+          console.log('AN ERROR OCCURED: ', error);
+          setShowFailureModal(true);
         });
     };
 
     const fetchValidator = async () => {
-      const response = await fetch(
+      setStatus('loading');
+      fetch(
         `https://api.dev.cliqets.xyz/validator/verify_assignments/${userId}`,
         {
           method: 'GET',
@@ -117,9 +107,7 @@ const Sync = ({navigation, route}: any) => {
         },
       ).then(async data => {
         if (data.status == 200) {
-          console.log('====================================');
-          console.log('Validator Verified');
-          const eventsResponse = await fetch(
+          fetch(
             `https://api.dev.cliqets.xyz/validator/events?user_id=${userId}&start_key=0&count=10`,
             {
               method: 'GET',
@@ -133,23 +121,26 @@ const Sync = ({navigation, route}: any) => {
               return data.json();
             })
             .then(newData => {
-              console.log('====================================');
-              console.log({events: newData});
-              console.log('====================================');
-              // navigation.navigate("Events", {EventsObj: newData})
               setEvents(newData);
+              setStatus('completed');
+            })
+            .catch(error => {
+              console.log('error: ', error);
+              setStatus('failed');
             });
-          console.log('====================================');
         } else {
-          console.log('====================================');
-          console.log({noEvent: data});
-          console.log('====================================');
+          setStatus('failed');
         }
       });
     };
 
     getUser();
   }, []);
+
+  useEffect(() => {
+    if (status === 'failed') setShowFailureModal(true);
+    if (status === 'completed') setShowModal(true);
+  }, [status]);
 
   return (
     <View flex="1">
@@ -192,13 +183,6 @@ const Sync = ({navigation, route}: any) => {
           )}
 
           <Box flexDirection="row" justifyContent="space-between">
-            <CustomButton
-              onPress={() => {
-                setShowModal(true);
-              }}
-              btnText="Success"
-              btnType={ButtonType.PRIMARY}
-            />
             <CustomModal
               heading={'Success'}
               showModal={showModal}
@@ -210,14 +194,6 @@ const Sync = ({navigation, route}: any) => {
               onPress={() => {
                 navigation.navigate('Events', {EventsObj: events});
               }}
-            />
-
-            <CustomButton
-              onPress={() => {
-                setShowFailureModal(true);
-              }}
-              btnText="Failure"
-              btnType={ButtonType.PRIMARY}
             />
             <CustomModal
               heading={'Connection failed'}
@@ -248,7 +224,7 @@ const Sync = ({navigation, route}: any) => {
           <>
             <Box w="100%" maxW="400">
               <Progress
-                value={100}
+                value={progress}
                 mx="3"
                 size="xs"
                 colorScheme="primary"

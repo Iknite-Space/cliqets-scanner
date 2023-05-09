@@ -43,7 +43,6 @@ const Register = ({navigation}: Props) => {
     setShowBackground(now);
   };
 
-
   useEffect(() => {
     const onAuthStateChanged = (user: any) => {
       if (user) {
@@ -72,24 +71,17 @@ const Register = ({navigation}: Props) => {
   const confirmCode = async () => {
     try {
       await confirm.confirm(code).then((user: any) => {
-        console.log('Code Activated');
-        console.log('====================================');
-        console.log('====================================');
-        console.log({user});
-        console.log('====================================');
         if (user) {
-          user
-            .user.getIdToken()
-            .then((token: React.SetStateAction<string>) =>
-              navigation.navigate('MainStack', {
-                screen: 'Sync',
-                params: {tokenObj: token},
-              }),
-            );
+          user.user.getIdToken().then((token: React.SetStateAction<string>) =>
+            navigation.navigate('MainStack', {
+              screen: 'Sync',
+              params: {tokenObj: token},
+            }),
+          );
         }
       });
     } catch (error) {
-      console.log('Invalid Code.');
+      console.log('Invalid Code.', error);
     }
   };
 
@@ -236,7 +228,6 @@ const Register = ({navigation}: Props) => {
             setCode(value);
           }}
         />
-
 
         <CustomButton
           btnText={'Confirm code'}
