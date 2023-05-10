@@ -25,10 +25,12 @@ const CustomButton: React.FC<Props> = ({
     <Button
       bgColor={btnType === ButtonType.PRIMARY ? 'primary.500' : 'transparent'}
       isDisabled={disabled || loading}
-      borderRadius={20}
+      borderRadius={30}
       variant={btnType === ButtonType.PRIMARY ? 'solid' : 'outline'}
       borderColor="primary.500"
       mx="auto"
+      px="10"
+      py="3"
       onPress={onPress}>
       <Text
         fontWeight="700"

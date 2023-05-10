@@ -1,4 +1,5 @@
 import {
+  BackHandler,
   Keyboard,
   TouchableOpacity,
   Pressable,
@@ -11,6 +12,15 @@ import {useRoute} from '@react-navigation/native';
 export default function Home({navigation, route}: any) {
   const downloadGuestList = () => {};
   const [tickets, setTickets] = useState([]);
+
+  const goBackToEvents = () => {
+    navigation.goBack();
+    return true;
+  };
+
+  BackHandler.addEventListener('hardwareBackPress', goBackToEvents);
+
+  BackHandler.removeEventListener("hardwareBackPress", goBackToEvents);
 
   useEffect(() => {
     const getTickets = async () => {

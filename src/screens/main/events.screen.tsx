@@ -1,18 +1,25 @@
 import Event from '../../components/Event';
-import {TextBase, TouchableOpacity} from 'react-native';
+import {Alert, BackHandler, TextBase, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View, Text, Button} from 'native-base';
 type Props = {
   navigation: any;
+  route: any;
 };
 
-const Events = ({navigation, route}: any) => {
+const Events = ({navigation, route}: Props) => {
   const [events, setEvents] = useState();
 
   useEffect(() => {
     setEvents(route.params.EventsObj);
   }, []);
 
+  const goBackToSync = () => {
+    navigation.goBack();
+    return true;
+  };
+
+  BackHandler.addEventListener('hardwareBackPress', goBackToSync);
 
   return (
     <ScrollView>
