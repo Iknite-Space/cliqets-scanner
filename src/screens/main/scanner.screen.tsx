@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import { StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { Box, Flex, Image, Pressable, Spacer, Text, View } from "native-base";
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {CustomModal} from '../../components';
 import {ModalType} from '../../components/general/Modal.component';
@@ -29,13 +31,6 @@ export default function Scanner({navigation, route}: any) {
     return subscriber;
   }, [navigation]);
 
-  const decodeJwt = (jwt: any, verify: any) => {
-    setDecodedToken(jwt_decode(jwt));
-    verify(() => {
-      return decodedToken.purchase_id
-    })
-  }
-
   const verifyTicket = async ticket => {
     await fetch(
       `https://api.dev.cliqets.xyz/guest/purchased_tickets/${ticket}`,
@@ -65,7 +60,64 @@ export default function Scanner({navigation, route}: any) {
       });
   };
   return (
-    <>
+
+    <Flex backgroundColor="white" h="full" pt="3">
+      <Box
+        flexDirection="row"
+        justifyContent="space-between"
+        mt="5"
+        alignItems="center"
+      >
+        <Pressable onPress={() => navigation.navigate("Home")}>
+          <Image source={require("../../assets/Caret-Left.png")} alt="#" ml="5" />
+        </Pressable>
+        <Pressable onPress={() => navigation.navigate("Ticket Valid")}>
+          <Text bold fontSize="lg">
+            Scanner
+          </Text>
+        </Pressable>
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          rounded="full"
+          p="1"
+          px="2"
+          w="27%"
+          // h="75%"
+          mr="2"
+          // mt="4"
+          backgroundColor="#F4F4F9"
+          // right="0"
+          // position="absolute"
+        >
+          <Text fontSize="md" bold>
+            Online
+          </Text>
+          <Box rounded="full" backgroundColor="#00F89E" px="3"></Box>
+        </Box>
+      </Box>
+      <View px="2" py="5" w="100%" mb="10" alignItems="center">
+        <Text
+          color="primary.500"
+          fontSize="md"
+          bold
+          textAlign="center"
+          mx="auto"
+        >
+          Place the QR Code inside the frame. Please avoid shaking to get results
+          faster.
+        </Text>
+      </View>
+
+      <QRCodeScanner
+        onRead={({data}) => {
+          verifyTicket(jwt_decode(data).purchase_id);
+        }}
+        reactivate={true}
+        reactivateTimeout={5000}
+        containerStyle={styles.barCode}
+      />
+
       <CustomModal
         heading={'Valid ticket!'}
         showModal={showModal}
@@ -91,14 +143,19 @@ export default function Scanner({navigation, route}: any) {
           setShowInvalidModal(false);
         }}
       />
-
-      <QRCodeScanner
-        onRead={({data}) => {
-          decodeJwt(data, verifyTicket)
-        }}
-        reactivate={true}
-        reactivateTimeout={5000}
-      />
-    </>
+    </Flex>
+    
+    
   );
 }
+
+const styles = StyleSheet.create({
+  barCode: {
+    ...StyleSheet.absoluteFillObject,
+    height: "75%",
+    top: 125,
+    alignItems: "center",
+    marginTop: 30,
+    width: "100%",
+  },
+});

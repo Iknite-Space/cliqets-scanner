@@ -6,8 +6,12 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Box, Button, Image, Text, View} from 'native-base';
+import {Box, Button, Image, Input, Text, View} from 'native-base';
 import {useRoute} from '@react-navigation/native';
+import { CustomButton } from '../../components';
+import { ButtonType } from '../../components/general/Button.component';
+import SearchIcon from 'react-native-vector-icons/AntDesign';
+import DownloadIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function Home({navigation, route}: any) {
   const downloadGuestList = () => {};
@@ -56,16 +60,13 @@ export default function Home({navigation, route}: any) {
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center"
-          // mt="1"
+          mt="5"
         >
           <Box maxH="50%" flex="1" flexDirection="column">
             <Image
-              source={require('../../assets/Cliqkets_logo_3.jpg')}
+              source={require('../../assets/Cliqkets_logoNew.png')}
               ml="5"
-              // mt="3"
               alt="#"
-              // w="167px"
-              // h="48px"
             />
           </Box>
           <Box
@@ -78,8 +79,6 @@ export default function Home({navigation, route}: any) {
             mr="3"
             mt="4"
             backgroundColor="#F4F4F9"
-            // right="0"
-            // position="absolute"
           >
             <Text fontSize="md" bold>
               Online
@@ -88,25 +87,33 @@ export default function Home({navigation, route}: any) {
           </Box>
         </View>
         <View alignItems="center" mt="5">
-          <Image source={require('../../assets/QR.png')} alt="#" my="5" />
-          <Button
-            backgroundColor="#3935F4"
-            rounded="full"
-            px="8"
-            py="4"
-            mt="3"
+        <Input
+            w={{
+              base: "90%",
+              md: "25%",
+            }}
+            InputRightElement={
+              <SearchIcon.Button name="search1" size={25} mr="2" color="#FF5500" backgroundColor="transparent" onPress={() => {}}/>
+            }
+            placeholder="Search tickets by number, name, email"
+            fontWeight="semibold"            
+            borderColor="primary.500"
+            borderRadius="xl"
             mb="10"
-            onPress={() => navigation.navigate('Scanner', {tickets})}>
-            <Text bold color="white" fontSize="lg">
-              Scan Tickets
-            </Text>
-          </Button>
+            mt="7"
+            size="md"
+          />
+          <Image source={require('../../assets/QR.png')} alt="#" my="5" mb="10" />
+          <CustomButton btnType={ButtonType.PRIMARY} btnText='Scan Tickets' onPress={() => navigation.navigate('Scanner', {tickets})}/>
 
-          <Box flexDirection="row" w="55%" alignItems="center">
-            <TouchableOpacity onPress={() => downloadGeustList}>
-              <Text bold color="#3935F4" fontSize="md">
-                Print Guest List
+          <Box flexDirection="row" justifyContent="space-between" alignItems="center" mt="16" mx="auto">
+            <TouchableOpacity onPress={() => downloadGuestList}>
+              <Text bold color="primary.500" fontSize="md">
+                Print Ticket Guest List
               </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => downloadGuestList}>
+              <DownloadIcon.Button name="file-download-outline" size={25} color="#FF5500" backgroundColor="transparent" />
             </TouchableOpacity>
           </Box>
         </View>

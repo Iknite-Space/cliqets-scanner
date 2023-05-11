@@ -47,7 +47,7 @@ export default function Event({
           display="flex"
           flexDirection="row"
           marginY={2}>
-          <Flex direction="row" align="center" px="3" bg="#C2BDF5:alpha.30">
+          <Flex direction="row" align="center" px="3" bg="primary.300">
             <Image
               source={{
                 uri: imgsrc,

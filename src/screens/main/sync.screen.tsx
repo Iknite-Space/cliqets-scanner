@@ -246,7 +246,8 @@ const Sync = ({navigation, route}: Props) => {
                 value={progress}
                 mx="3"
                 size="xs"
-                colorScheme="primary"
+                bg='coolGray.100'
+                _filledTrack={{bg: "primary.500"}}
                 mb="4"
               />
             </Box>
@@ -258,7 +259,8 @@ const Sync = ({navigation, route}: Props) => {
                 value={progress}
                 mx="3"
                 size="xs"
-                colorScheme="primary"
+                bg='coolGray.100'
+                _filledTrack={{bg: "primary.500"}}
                 mb="4"
               />
             </Box>
