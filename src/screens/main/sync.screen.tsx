@@ -1,6 +1,8 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {
   Animated,
+  Alert,
+  BackHandler,
   FlexAlignType,
   ImageBackground,
   Keyboard,
@@ -23,24 +25,26 @@ import {CustomButton, CustomModal} from '../../components';
 import {ButtonType} from '../../components/general/Button.component';
 import {ModalType} from '../../components/general/Modal.component';
 import jwt_decode from 'jwt-decode';
+import { useFocusEffect } from '@react-navigation/native';
 
 type Props = {
   navigation: any;
+  route: any;
 };
 
-const Sync = ({navigation, route}: any) => {
+const Sync = ({navigation, route}: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [showLogo, setShowLogo] = useState(true);
   const [showFailureModal, setShowFailureModal] = useState(false);
   const [status, setStatus] = useState('');
   const [events, setEvents] = useState();
+  const [progress, setProgress] = useState(0);
+  const [reload, setReload] = useState(false);
 
   const token = route.params.tokenObj;
   const decodedToken: any = jwt_decode(token);
   const userId = decodedToken.user_id;
   const phoneNumber = decodedToken.phone_number;
-
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -48,7 +52,7 @@ const Sync = ({navigation, route}: any) => {
         if (status === 'completed') {
           setProgress(100);
         } else if (status === 'loading' && progress < 80) {
-          setProgress(progress + 0.25);
+          setProgress(progress + 25);
         }
       }
     }, 250);
@@ -135,7 +139,32 @@ const Sync = ({navigation, route}: any) => {
     };
 
     getUser();
-  }, []);
+  }, [reload]);
+
+  useFocusEffect(() => {
+    const exitApp = () => {
+      Alert.alert(
+        'Exit App?',
+        'Exiting the application',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => {},
+          },
+          {
+            text: 'OK',
+            onPress: () => BackHandler.exitApp(),
+          },
+        ],
+        {
+          cancelable: false,
+        },
+      );
+      return true;
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', exitApp);
+  })
 
   useEffect(() => {
     if (status === 'failed') setShowFailureModal(true);
@@ -203,7 +232,9 @@ const Sync = ({navigation, route}: any) => {
               description={'Check your internet and try again'}
               btnText={'Try again'}
               btnType={ButtonType.PRIMARY}
-              onPress={() => {}}
+              onPress={() => {
+                setReload(!reload);
+              }}
             />
           </Box>
         </Box>

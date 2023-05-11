@@ -36,6 +36,7 @@ const Register = ({navigation}: Props) => {
   const [code, setCode] = useState('');
   const [showBackground, setShowBackground] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   // const [newToken, setNewToken] = useState('eyJhbGciOiJIUzI1NiIsImtpZCI6ImI2NzE1ZTJmZjcxZDIyMjQ5ODk1MDAyMzY2ODMwNDc3Mjg2Nzg0ZTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiICIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9jbGlxZXRzLTRmY2U4IiwiYXVkIjoiY2xpcWV0cy00ZmNlOCIsImF1dGhfdGltZSI6MTY4MzM5NjE5NCwidXNlcl9pZCI6ImJiNTZhMTU5LTIyMjItNGU2ZC05OWI3LTk4ODNjMmE3MDlkYiIsInN1YiI6ImJiNTZhMTU5LTIyMjItNGU2ZC05OWI3LTk4ODNjMmE3MDlkYiIsImlhdCI6MTY4MzM5OTc4MSwiZXhwIjoxNjgzNDAzMzgxLCJwaG9uZV9udW1iZXIiOiIrMjM3NjU0MTMxMDI3IiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJwaG9uZSI6WyIrMjM3Njc1NDEzMTAyNyJdfSwic2lnbl9pbl9wcm92aWRlciI6InBob25lIn19.TDBKDbY9_xM0lH7HJjRPAqnLLiMd79D1CP-1sjN9UQU');
   const [loading, setLoading] = useState(false);
 
@@ -46,7 +47,6 @@ const Register = ({navigation}: Props) => {
   useEffect(() => {
     const onAuthStateChanged = (user: any) => {
       if (user) {
-        // navigation.navigate('MainStack');
         user.getIdToken().then((token: string) =>
           navigation.navigate('MainStack', {
             screen: 'Sync',
@@ -130,34 +130,51 @@ const Register = ({navigation}: Props) => {
 
             <FormControl width="100" my="3" ml="5">
               <Flex direction="row" align="center">
-                <InputGroup>
+                <InputGroup mb="4">
                   <PhoneInput
                     ref={newRef}
                     initialCountry={'cm'}
                     textProps={{placeholder: 'Enter your phone number'}}
-                    flagStyle={{width: 50, height: 35, borderRadius: 5}}
+                    flagStyle={{width: 35, height: 25, borderRadius: 3}}
+                    disabled={disabled}
+                    autoFormat={true}
                     onChangePhoneNumber={number => {
-                      setPhoneNumber(number);
+                      // number.replace(/ /g, "")
+                      if (number.replace(/ /g, "").length == 13) {
+                        setDisabled(true);
+                        setPhoneNumber(number.replace(/ /g, ""));
+                      }
                     }}
+                    maxLength={9}
                     textStyle={{
                       width: 200,
-                      backgroundColor: 'lightgray',
+                      backgroundColor: '#FDFAFA',
                       height: 39,
                       borderRadius: 5,
                       paddingLeft: 10,
+                    }}
+                    style={{
+                      padding: 8,
+                      backgroundColor: '#FDFAFA',
+                      width: 285,
+                      borderWidth: 1,
+                      borderColor: 'lightgray',
+                      borderRadius: 5,
                     }}
                   />
                 </InputGroup>
               </Flex>
             </FormControl>
 
-            <CustomButton
-              onPress={login}
-              btnText="Verify phone number"
-              btnType={ButtonType.PRIMARY}
-              loading={loading}
-              disabled={!phoneNumber}
-            />
+            <Box width="3/4">
+              <CustomButton
+                onPress={login}
+                btnText="Verify phone number"
+                btnType={ButtonType.PRIMARY}
+                loading={loading}
+                disabled={!disabled}
+              />
+            </Box>
             <CustomModal
               heading={'Connection failed'}
               showModal={false}
@@ -225,17 +242,20 @@ const Register = ({navigation}: Props) => {
           otpStyles={{backgroundColor: '#ddd', padding: -20}}
           keyboardType="numeric"
           onFinish={(value: any) => {
+            setDisabled(true)
             setCode(value);
           }}
         />
 
+        <Box width="3/4" ml="5" mt="3">
         <CustomButton
           btnText={'Confirm code'}
           btnType={ButtonType.PRIMARY}
           onPress={confirmCode}
           loading={loading}
-          disabled={!phoneNumber}
+          disabled={!disabled}
         />
+        </Box>
       </View>
     </TouchableWithoutFeedback>
   );

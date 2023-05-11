@@ -4,12 +4,15 @@ import {CustomModal} from '../../components';
 import {ModalType} from '../../components/general/Modal.component';
 import {ButtonType} from '../../components/general/Button.component';
 import auth from '@react-native-firebase/auth';
+import jwt_decode from 'jwt-decode';
 
 export default function Scanner({navigation, route}: any) {
   const [showModal, setShowModal] = useState(false);
   const [showInvalidModal, setShowInvalidModal] = useState(false);
   const [validTicket, setValidTicket] = useState() as any;
   const [token, setToken] = useState();
+  const [decodedToken, setDecodedToken] = useState({});
+  const [purchasId, setPurchaseId] = useState()
 
   const tickets = route.params?.tickets;
 
@@ -25,6 +28,13 @@ export default function Scanner({navigation, route}: any) {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
   }, [navigation]);
+
+  const decodeJwt = (jwt: any, verify: any) => {
+    setDecodedToken(jwt_decode(jwt));
+    verify(() => {
+      return decodedToken.purchase_id
+    })
+  }
 
   const verifyTicket = async ticket => {
     await fetch(
@@ -84,7 +94,7 @@ export default function Scanner({navigation, route}: any) {
 
       <QRCodeScanner
         onRead={({data}) => {
-          verifyTicket(data);
+          decodeJwt(data, verifyTicket)
         }}
         reactivate={true}
         reactivateTimeout={5000}
