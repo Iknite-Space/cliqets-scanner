@@ -23,9 +23,9 @@ const Events = ({navigation, route}: Props) => {
 
   return (
     <ScrollView>
-      <View px="2" pb="8" pt="2" bg="blue.700" w="100%">
+      <View px="2" pb="8" pt="2" bg="primary.500" w="100%">
         <View display="flex"></View>
-        <Text color="white" bold fontSize="2xl" textAlign="center">
+        <Text color="white" bold fontSize="2xl" textAlign="center" mt="5">
           Select Event
         </Text>
       </View>
