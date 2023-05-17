@@ -19,10 +19,19 @@ linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
   use_frameworks! :linkage => linkage.to_sym
+  use_frameworks! :linkage => :static
 end
 
 target 'cliquetsmobile' do
+  # use_frameworks!
   config = use_native_modules!
+
+  # Pods for Google Signin
+  # pod 'GoogleSignIn', '~> 6.1.0'
+  # pod 'Firebase', :modular_headers => true
+  # pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
 
   # Flags change depending on the env values.
   flags = get_default_flags()
