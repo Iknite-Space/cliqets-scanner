@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>NSCameraUsageDescription</key>
+    <string>To scan and validate tickers $(EXECUTABLE_NAME) will need access to your camera</string>
 	<key>CFBundleDisplayName</key>
 	<string>cliquetsmobile</string>
 	<key>CFBundleExecutable</key>
