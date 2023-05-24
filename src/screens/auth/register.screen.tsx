@@ -1,5 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
+  Alert,
+  BackHandler,
   ImageBackground,
   Keyboard,
   StyleSheet,
@@ -24,6 +26,7 @@ import {OTP} from 'react-native-otp-form';
 import {CustomButton, CustomModal} from '../../components';
 import {ButtonType} from '../../components/general/Button.component';
 import {ModalType} from '../../components/general/Modal.component';
+import {useFocusEffect} from '@react-navigation/native';
 
 type Props = {
   navigation: any;
@@ -84,6 +87,31 @@ const Register = ({navigation}: Props) => {
       console.log('Invalid Code.', error);
     }
   };
+
+  useFocusEffect(() => {
+    const exitApp = () => {
+      Alert.alert(
+        'Exit app?',
+        'Exiting the application',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => {},
+          },
+          {
+            text: 'OK',
+            onPress: () => BackHandler.exitApp(),
+          },
+        ],
+        {
+          cancelable: false,
+        },
+      );
+      return true;
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', exitApp);
+  });
 
   if (!confirm) {
     return (
@@ -152,6 +180,7 @@ const Register = ({navigation}: Props) => {
                       height: 39,
                       borderRadius: 5,
                       paddingLeft: 10,
+                      color: "#000000"
                     }}
                     style={{
                       padding: 8,

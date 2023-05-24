@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {Events, Home, Scanner, Sync} from '../screens';
+import {Events, Home, Tables, Scanner, Sync} from '../screens';
 
 const Stack = createNativeStackNavigator();
 const MainStack = () => {
@@ -25,6 +25,11 @@ const MainStack = () => {
         name="Scanner"
         options={{headerShown: false}}
         component={Scanner}
+      />
+      <Stack.Screen
+        name="Tables"
+        options={{headerShown: false}}
+        component={Tables}        
       />
     </Stack.Navigator>
   );

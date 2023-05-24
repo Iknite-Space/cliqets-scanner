@@ -4,6 +4,11 @@ import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
+import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
+
+// // Include Package
+// new MainReactPackage(),
+// new RNHTMLtoPDFPackage();
 
 public class MainActivity extends ReactActivity {
 
@@ -32,4 +37,14 @@ public class MainActivity extends ReactActivity {
         DefaultNewArchitectureEntryPoint.getConcurrentReactEnabled() // concurrentRootEnabled
         );
   }
+  // Just added this to test new packages - Remove this if you have errors compiling or executing - G.T - It failed spectacularly
+  // @Override
+  // protected List<ReactPackage> getPackages() {
+  //   /UnnecessaryLocalVariable/
+  //   List<ReactPackage> packages = new PackageList().getPackages();
+  //   packages.add(new MainReactPackage());
+  //   packages.add(new RNHTMLtoPDFPackage();)
+
+  //   return packages;
+  // }
 }

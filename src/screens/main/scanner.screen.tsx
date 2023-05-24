@@ -111,7 +111,7 @@ export default function Scanner({navigation, route}: any) {
 
       <QRCodeScanner
         onRead={({data}) => {
-          verifyTicket(jwt_decode(data).purchase_id);
+          verifyTicket(jwt_decode(data).ticket.purcchase_ticket_id);
         }}
         reactivate={true}
         reactivateTimeout={5000}
