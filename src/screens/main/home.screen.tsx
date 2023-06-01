@@ -107,12 +107,12 @@ export default function Home({navigation, route}: any) {
           <CustomButton btnType={ButtonType.PRIMARY} btnText='Scan Tickets' onPress={() => navigation.navigate('Scanner', {tickets})}/>
 
           <Box flexDirection="row" justifyContent="space-between" alignItems="center" mt="16" mx="auto">
-            <TouchableOpacity onPress={() => downloadGuestList}>
+            <TouchableOpacity onPress={() => navigation.navigate('Tables', { ticketsObj: tickets })}>
               <Text bold color="primary.500" fontSize="md">
                 Print Ticket Guest List
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => downloadGuestList}>
+            <TouchableOpacity onPress={() =>  navigation.navigate('Tables', { ticketsObj: tickets })}>
               <DownloadIcon.Button name="file-download-outline" size={25} color="#FF5500" backgroundColor="transparent" />
             </TouchableOpacity>
           </Box>

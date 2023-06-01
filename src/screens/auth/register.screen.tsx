@@ -1,5 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
+  Alert,
+  BackHandler,
   ImageBackground,
   Keyboard,
   StyleSheet,
@@ -24,6 +26,7 @@ import {OTP} from 'react-native-otp-form';
 import {CustomButton, CustomModal} from '../../components';
 import {ButtonType} from '../../components/general/Button.component';
 import {ModalType} from '../../components/general/Modal.component';
+import {useFocusEffect} from '@react-navigation/native';
 
 type Props = {
   navigation: any;
@@ -37,7 +40,6 @@ const Register = ({navigation}: Props) => {
   const [showBackground, setShowBackground] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  // const [newToken, setNewToken] = useState('eyJhbGciOiJIUzI1NiIsImtpZCI6ImI2NzE1ZTJmZjcxZDIyMjQ5ODk1MDAyMzY2ODMwNDc3Mjg2Nzg0ZTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiICIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9jbGlxZXRzLTRmY2U4IiwiYXVkIjoiY2xpcWV0cy00ZmNlOCIsImF1dGhfdGltZSI6MTY4MzM5NjE5NCwidXNlcl9pZCI6ImJiNTZhMTU5LTIyMjItNGU2ZC05OWI3LTk4ODNjMmE3MDlkYiIsInN1YiI6ImJiNTZhMTU5LTIyMjItNGU2ZC05OWI3LTk4ODNjMmE3MDlkYiIsImlhdCI6MTY4MzM5OTc4MSwiZXhwIjoxNjgzNDAzMzgxLCJwaG9uZV9udW1iZXIiOiIrMjM3NjU0MTMxMDI3IiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJwaG9uZSI6WyIrMjM3Njc1NDEzMTAyNyJdfSwic2lnbl9pbl9wcm92aWRlciI6InBob25lIn19.TDBKDbY9_xM0lH7HJjRPAqnLLiMd79D1CP-1sjN9UQU');
   const [loading, setLoading] = useState(false);
 
   const changeBackground = async (now: any) => {
@@ -84,6 +86,31 @@ const Register = ({navigation}: Props) => {
       console.log('Invalid Code.', error);
     }
   };
+
+  useFocusEffect(() => {
+    const exitApp = () => {
+      Alert.alert(
+        'Exit app?',
+        'Exiting the application',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => {},
+          },
+          {
+            text: 'OK',
+            onPress: () => BackHandler.exitApp(),
+          },
+        ],
+        {
+          cancelable: false,
+        },
+      );
+      return true;
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', exitApp);
+  });
 
   if (!confirm) {
     return (
@@ -152,6 +179,7 @@ const Register = ({navigation}: Props) => {
                       height: 39,
                       borderRadius: 5,
                       paddingLeft: 10,
+                      color: "#000000"
                     }}
                     style={{
                       padding: 8,

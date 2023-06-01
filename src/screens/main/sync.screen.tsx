@@ -25,7 +25,8 @@ import {CustomButton, CustomModal} from '../../components';
 import {ButtonType} from '../../components/general/Button.component';
 import {ModalType} from '../../components/general/Modal.component';
 import jwt_decode from 'jwt-decode';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 type Props = {
   navigation: any;
@@ -144,8 +145,8 @@ const Sync = ({navigation, route}: Props) => {
   useFocusEffect(() => {
     const exitApp = () => {
       Alert.alert(
-        'Exit App?',
-        'Exiting the application',
+        'Sign Out?',
+        'Logging out of the application',
         [
           {
             text: 'Cancel',
@@ -153,7 +154,11 @@ const Sync = ({navigation, route}: Props) => {
           },
           {
             text: 'OK',
-            onPress: () => BackHandler.exitApp(),
+            onPress: () => {
+              auth().signOut().then(() => {
+                navigation.navigate("AuthStack");
+              })
+            },
           },
         ],
         {
@@ -164,7 +169,7 @@ const Sync = ({navigation, route}: Props) => {
     };
 
     BackHandler.addEventListener('hardwareBackPress', exitApp);
-  })
+  });
 
   useEffect(() => {
     if (status === 'failed') setShowFailureModal(true);
@@ -234,6 +239,7 @@ const Sync = ({navigation, route}: Props) => {
               btnType={ButtonType.PRIMARY}
               onPress={() => {
                 setReload(!reload);
+                setShowFailureModal(false);
               }}
             />
           </Box>
@@ -246,8 +252,8 @@ const Sync = ({navigation, route}: Props) => {
                 value={progress}
                 mx="3"
                 size="xs"
-                bg='coolGray.100'
-                _filledTrack={{bg: "primary.500"}}
+                bg="coolGray.100"
+                _filledTrack={{bg: 'primary.500'}}
                 mb="4"
               />
             </Box>
@@ -259,8 +265,8 @@ const Sync = ({navigation, route}: Props) => {
                 value={progress}
                 mx="3"
                 size="xs"
-                bg='coolGray.100'
-                _filledTrack={{bg: "primary.500"}}
+                bg="coolGray.100"
+                _filledTrack={{bg: 'primary.500'}}
                 mb="4"
               />
             </Box>
