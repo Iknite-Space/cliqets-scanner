@@ -40,7 +40,6 @@ const Register = ({navigation}: Props) => {
   const [showBackground, setShowBackground] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  // const [newToken, setNewToken] = useState('eyJhbGciOiJIUzI1NiIsImtpZCI6ImI2NzE1ZTJmZjcxZDIyMjQ5ODk1MDAyMzY2ODMwNDc3Mjg2Nzg0ZTMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiICIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9jbGlxZXRzLTRmY2U4IiwiYXVkIjoiY2xpcWV0cy00ZmNlOCIsImF1dGhfdGltZSI6MTY4MzM5NjE5NCwidXNlcl9pZCI6ImJiNTZhMTU5LTIyMjItNGU2ZC05OWI3LTk4ODNjMmE3MDlkYiIsInN1YiI6ImJiNTZhMTU5LTIyMjItNGU2ZC05OWI3LTk4ODNjMmE3MDlkYiIsImlhdCI6MTY4MzM5OTc4MSwiZXhwIjoxNjgzNDAzMzgxLCJwaG9uZV9udW1iZXIiOiIrMjM3NjU0MTMxMDI3IiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJwaG9uZSI6WyIrMjM3Njc1NDEzMTAyNyJdfSwic2lnbl9pbl9wcm92aWRlciI6InBob25lIn19.TDBKDbY9_xM0lH7HJjRPAqnLLiMd79D1CP-1sjN9UQU');
   const [loading, setLoading] = useState(false);
 
   const changeBackground = async (now: any) => {
