@@ -29,10 +29,6 @@ const Tables = ({navigation, route}: any) => {
 
   const event_id = route.params.event_id;
 
-  console.log('====================================');
-  console.log(event_id);
-  console.log('====================================');
-
   useEffect(() => {
     //get user's file paths from react-native-fs
     setDownloadsFolder(RNFS.DownloadDirectoryPath);
