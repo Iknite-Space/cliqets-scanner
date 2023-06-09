@@ -17,34 +17,40 @@ import {ButtonType} from '../../components/general/Button.component';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Pdf from 'react-native-pdf';
 import RNFS from 'react-native-fs';
+// import {WebView} from 'react-native-webview';
 
 const Tables = ({navigation, route}: any) => {
-  const [pdfPath, setPdfPath] = useState(null);
+  const [pdfPath, setPdfPath] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [count, setCount] = useState(1);
   const [downloadsFolder, setDownloadsFolder] = useState('');
   let orderNumber = 1;
+  // const [webView, setWebView] = useState(false);
+
+  const event_id = route.params.event_id;
+
+  console.log('====================================');
+  console.log(event_id);
+  console.log('====================================');
 
   useEffect(() => {
     //get user's file paths from react-native-fs
     setDownloadsFolder(RNFS.DownloadDirectoryPath);
   }, []);
 
-
   let ticketlist = route.params.ticketsObj.map((ticket: any) => {
     return {
-    n: orderNumber++,
-    phone:ticket.phone_number,
-    name: `${ticket.first_name} ${ticket.last_name}`,
-    type: ticket.ticket_type,
-    }
+      n: orderNumber++,
+      phone_number: ticket.phone_number,
+      name: ticket.user_name,
+      ticket_name: ticket.ticket_name,
+    };
   });
 
   let tickets = ticketlist.map(function (obj: any) {
-    return Object.keys(obj)
-      .map(function (key: any) {
-        return obj[key];
-      });
+    return Object.keys(obj).map(function (key: any) {
+      return obj[key];
+    });
   });
 
   const goBackToSync = () => {
@@ -55,8 +61,9 @@ const Tables = ({navigation, route}: any) => {
   BackHandler.addEventListener('hardwareBackPress', goBackToSync);
 
   const getHeadings = () => {
-    return Object.keys(ticketlist[0])
-      .map(header => header.toUpperCase().replace('_', ' '));
+    return Object.keys(ticketlist[0]).map(header =>
+      header.toUpperCase().replace('_', ' '),
+    );
   };
 
   const generatePDF = async () => {
@@ -120,8 +127,13 @@ const Tables = ({navigation, route}: any) => {
         </Table>
         <CustomButton
           btnType={ButtonType.PRIMARY}
-          btnText="Generate PDF"
-          onPress={() => generatePDF()}
+          btnText="Download PDF"
+          onPress={() => {
+            // setWebView(true);
+            navigation.navigate('WebViewPage', {
+              event_id: event_id,
+            })
+          }}
         />
         {pdfPath && (
           <Pdf
@@ -129,9 +141,16 @@ const Tables = ({navigation, route}: any) => {
             style={{flex: 1, width: '100%'}}
           />
         )}
+        {/* {webView && (
+          <WebView
+            source={{uri: 'http://example.com/'}}
+            style={{flex: 1}}></WebView>
+        )} */}
       </View>
     </ScrollView>
   );
 };
 
 export default Tables;
+
+//

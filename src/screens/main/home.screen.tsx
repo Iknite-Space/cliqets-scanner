@@ -8,8 +8,8 @@ import {
 import React, {useEffect, useState} from 'react';
 import {Box, Button, Image, Input, Text, View} from 'native-base';
 import {useRoute} from '@react-navigation/native';
-import { CustomButton } from '../../components';
-import { ButtonType } from '../../components/general/Button.component';
+import {CustomButton} from '../../components';
+import {ButtonType} from '../../components/general/Button.component';
 import SearchIcon from 'react-native-vector-icons/AntDesign';
 import DownloadIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -24,7 +24,9 @@ export default function Home({navigation, route}: any) {
 
   BackHandler.addEventListener('hardwareBackPress', goBackToEvents);
 
-  BackHandler.removeEventListener("hardwareBackPress", goBackToEvents);
+  BackHandler.removeEventListener('hardwareBackPress', goBackToEvents);
+
+  const event_id = route.params.event_id;
 
   useEffect(() => {
     const getTickets = async () => {
@@ -49,7 +51,6 @@ export default function Home({navigation, route}: any) {
     getTickets();
   }, [route.params?.event_id]);
 
-
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -60,8 +61,7 @@ export default function Home({navigation, route}: any) {
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center"
-          mt="5"
-        >
+          mt="5">
           <Box maxH="50%" flex="1" flexDirection="column">
             <Image
               source={require('../../assets/Cliqkets_logoNew.png')}
@@ -78,8 +78,7 @@ export default function Home({navigation, route}: any) {
             w="27%"
             mr="3"
             mt="4"
-            backgroundColor="#F4F4F9"
-          >
+            backgroundColor="#F4F4F9">
             <Text fontSize="md" bold>
               Online
             </Text>
@@ -87,33 +86,71 @@ export default function Home({navigation, route}: any) {
           </Box>
         </View>
         <View alignItems="center" mt="5">
-        <Input
+          <Input
             w={{
-              base: "90%",
-              md: "25%",
+              base: '90%',
+              md: '25%',
             }}
             InputRightElement={
-              <SearchIcon.Button name="search1" size={25} mr="2" color="#FF5500" backgroundColor="transparent" onPress={() => {}}/>
+              <SearchIcon.Button
+                name="search1"
+                size={25}
+                mr="2"
+                color="#FF5500"
+                backgroundColor="transparent"
+                onPress={() => {}}
+              />
             }
             placeholder="Search tickets by number, name, email"
-            fontWeight="semibold"            
+            fontWeight="semibold"
             borderColor="primary.500"
             borderRadius="xl"
             mb="10"
             mt="7"
             size="md"
           />
-          <Image source={require('../../assets/QR.png')} alt="#" my="5" mb="10" />
-          <CustomButton btnType={ButtonType.PRIMARY} btnText='Scan Tickets' onPress={() => navigation.navigate('Scanner', {tickets})}/>
+          <Image
+            source={require('../../assets/QR.png')}
+            alt="#"
+            my="5"
+            mb="10"
+          />
+          <CustomButton
+            btnType={ButtonType.PRIMARY}
+            btnText="Scan Tickets"
+            onPress={() => navigation.navigate('Scanner', {tickets})}
+          />
 
-          <Box flexDirection="row" justifyContent="space-between" alignItems="center" mt="16" mx="auto">
-            <TouchableOpacity onPress={() => navigation.navigate('Tables', { ticketsObj: tickets })}>
+          <Box
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            mt="16"
+            mx="auto">
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Tables', {
+                  ticketsObj: tickets,
+                  event_id: event_id,
+                })
+              }>
               <Text bold color="primary.500" fontSize="md">
                 Print Ticket Guest List
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() =>  navigation.navigate('Tables', { ticketsObj: tickets })}>
-              <DownloadIcon.Button name="file-download-outline" size={25} color="#FF5500" backgroundColor="transparent" />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Tables', {
+                  ticketsObj: tickets,
+                  event_id: event_id,
+                })
+              }>
+              <DownloadIcon.Button
+                name="file-download-outline"
+                size={25}
+                color="#FF5500"
+                backgroundColor="transparent"
+              />
             </TouchableOpacity>
           </Box>
         </View>

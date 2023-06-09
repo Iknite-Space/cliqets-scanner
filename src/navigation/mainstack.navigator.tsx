@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {Events, Home, Tables, Scanner, Sync} from '../screens';
+import {Events, Home, Tables, Scanner, Sync, WebViewPage} from '../screens';
 
 const Stack = createNativeStackNavigator();
 const MainStack = () => {
@@ -30,6 +30,11 @@ const MainStack = () => {
         name="Tables"
         options={{headerShown: false}}
         component={Tables}        
+      />
+      <Stack.Screen
+        name="WebViewPage"
+        options={{headerShown: false}}
+        component={WebViewPage}        
       />
     </Stack.Navigator>
   );
