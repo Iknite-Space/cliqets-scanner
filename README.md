@@ -91,7 +91,7 @@ To get a local copy and to set it up and running follow these simple example ste
 
 👤 **Gilbert Tima**
 
-- Github: [Casaemiro](https://github.com/I-Frostbyte/)
+- Github: [I-Frostbyte](https://github.com/I-Frostbyte/)
 
 ---
 
