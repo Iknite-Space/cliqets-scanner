@@ -167,9 +167,9 @@ const Register = ({navigation}: Props) => {
                     autoFormat={true}
                     onChangePhoneNumber={number => {
                       // number.replace(/ /g, "")
-                      if (number.replace(/ /g, "").length == 13) {
+                      if (number.replace(/ /g, '').length == 13) {
                         setDisabled(true);
-                        setPhoneNumber(number.replace(/ /g, ""));
+                        setPhoneNumber(number.replace(/ /g, ''));
                       }
                     }}
                     maxLength={9}
@@ -179,7 +179,7 @@ const Register = ({navigation}: Props) => {
                       height: 39,
                       borderRadius: 5,
                       paddingLeft: 10,
-                      color: "#000000"
+                      color: '#000000',
                     }}
                     style={{
                       padding: 8,
@@ -270,19 +270,19 @@ const Register = ({navigation}: Props) => {
           otpStyles={{backgroundColor: '#ddd', padding: -20}}
           keyboardType="numeric"
           onFinish={(value: any) => {
-            setDisabled(true)
+            setDisabled(true);
             setCode(value);
           }}
         />
 
         <Box width="3/4" ml="5" mt="3">
-        <CustomButton
-          btnText={'Confirm code'}
-          btnType={ButtonType.PRIMARY}
-          onPress={confirmCode}
-          loading={loading}
-          disabled={!disabled}
-        />
+          <CustomButton
+            btnText={'Confirm code'}
+            btnType={ButtonType.PRIMARY}
+            onPress={confirmCode}
+            loading={loading}
+            disabled={!disabled}
+          />
         </Box>
       </View>
     </TouchableWithoutFeedback>

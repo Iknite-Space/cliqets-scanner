@@ -29,12 +29,12 @@ const MainStack = () => {
       <Stack.Screen
         name="Tables"
         options={{headerShown: false}}
-        component={Tables}        
+        component={Tables}
       />
       <Stack.Screen
         name="WebViewPage"
         options={{headerShown: false}}
-        component={WebViewPage}        
+        component={WebViewPage}
       />
     </Stack.Navigator>
   );
