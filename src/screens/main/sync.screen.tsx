@@ -73,7 +73,7 @@ const Sync = ({navigation, route}: Props) => {
           if (data.ok) {
             fetchValidator();
           } else {
-            fetch(`https://api.dev.cliqets.xyz/user`, {
+            fetch('https://api.dev.cliqets.xyz/user', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -155,9 +155,11 @@ const Sync = ({navigation, route}: Props) => {
           {
             text: 'OK',
             onPress: () => {
-              auth().signOut().then(() => {
-                navigation.navigate("AuthStack");
-              })
+              auth()
+                .signOut()
+                .then(() => {
+                  navigation.navigate('AuthStack');
+                });
             },
           },
         ],
@@ -172,8 +174,12 @@ const Sync = ({navigation, route}: Props) => {
   });
 
   useEffect(() => {
-    if (status === 'failed') setShowFailureModal(true);
-    if (status === 'completed') setShowModal(true);
+    if (status === 'failed') {
+      setShowFailureModal(true);
+    }
+    if (status === 'completed') {
+      setShowModal(true);
+    }
   }, [status]);
 
   return (
@@ -197,7 +203,7 @@ const Sync = ({navigation, route}: Props) => {
           <Text fontSize="md" bold>
             Online
           </Text>
-          <Box rounded="full" backgroundColor="green.400" p="3"></Box>
+          <Box rounded="full" backgroundColor="green.400" p="3" />
         </Box>
 
         <Box mx="auto" mt="110%" alignItems="center">

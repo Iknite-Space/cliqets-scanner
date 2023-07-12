@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, Button, TouchableOpacity } from 'react-native';
-import { Box, Flex, Image, Pressable, Spacer, Text, View } from "native-base";
+import {StyleSheet, Button, TouchableOpacity} from 'react-native';
+import {Box, Flex, Image, Pressable, Spacer, Text, View} from 'native-base';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {CustomModal} from '../../components';
 import {ModalType} from '../../components/general/Modal.component';
 import {ButtonType} from '../../components/general/Button.component';
 import auth from '@react-native-firebase/auth';
 import jwt_decode from 'jwt-decode';
+import * as jose from 'jose';
 
 export default function Scanner({navigation, route}: any) {
   const [showModal, setShowModal] = useState(false);
@@ -14,14 +15,14 @@ export default function Scanner({navigation, route}: any) {
   const [validTicket, setValidTicket] = useState() as any;
   const [token, setToken] = useState();
   const [decodedToken, setDecodedToken] = useState({});
-  const [purchasId, setPurchaseId] = useState()
+  const [purchasId, setPurchaseId] = useState();
+  const [jwtCode, setJwtCode] = useState('');
 
   const tickets = route.params?.tickets;
 
   useEffect(() => {
     const onAuthStateChanged = (user: any) => {
       if (user) {
-
         user.getIdToken().then((t: string) => {
           setToken(t);
         });
@@ -30,6 +31,31 @@ export default function Scanner({navigation, route}: any) {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
   }, [navigation]);
+
+  // JWT VERIFICATION
+
+  // const verifyJWT = async () => {
+  //   const alg = 'ES256';
+  //   const spki = `-----BEGIN PUBLIC KEY-----
+  // MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEEVs/o5+uQbTjL3chynL4wXgUg2R9
+  // q9UU8I5mEovUf86QZ7kOBIjJwqnzD1omageEHWwHdBO6B+dFabmdT9POxg==
+  // -----END PUBLIC KEY-----`;
+  //   const publicKey = await jose.importSPKI(spki, alg);
+
+  //   const {payload, protectedHeader}: any = await jose
+  //     .jwtVerify(jwtCode, publicKey, {
+  //       issuer: 'urn:example:issuer',
+  //       audience: 'urn:example:audience',
+  //     })
+  //     .then(() => {
+  //       console.log('====================================');
+  //       console.log('Ticket Verified');
+  //       console.log('====================================');
+  //     });
+
+  //   console.log(protectedHeader);
+  //   console.log(payload);
+  // };
 
   const verifyTicket = async ticket => {
     await fetch(
@@ -60,18 +86,20 @@ export default function Scanner({navigation, route}: any) {
       });
   };
   return (
-
     <Flex backgroundColor="white" h="full" pt="3">
       <Box
         flexDirection="row"
         justifyContent="space-between"
         mt="5"
-        alignItems="center"
-      >
-        <Pressable onPress={() => navigation.navigate("Home")}>
-          <Image source={require("../../assets/Caret-Left.png")} alt="#" ml="5" />
+        alignItems="center">
+        <Pressable onPress={() => navigation.navigate('Home')}>
+          <Image
+            source={require('../../assets/Caret-Left.png')}
+            alt="#"
+            ml="5"
+          />
         </Pressable>
-        <Pressable onPress={() => navigation.navigate("Ticket Valid")}>
+        <Pressable onPress={() => navigation.navigate('Ticket Valid')}>
           <Text bold fontSize="lg">
             Scanner
           </Text>
@@ -93,7 +121,7 @@ export default function Scanner({navigation, route}: any) {
           <Text fontSize="md" bold>
             Online
           </Text>
-          <Box rounded="full" backgroundColor="#00F89E" px="3"></Box>
+          <Box rounded="full" backgroundColor="#00F89E" px="3" />
         </Box>
       </Box>
       <View px="2" py="5" w="100%" mb="10" alignItems="center">
@@ -102,16 +130,17 @@ export default function Scanner({navigation, route}: any) {
           fontSize="md"
           bold
           textAlign="center"
-          mx="auto"
-        >
-          Place the QR Code inside the frame. Please avoid shaking to get results
-          faster.
+          mx="auto">
+          Place the QR Code inside the frame. Please avoid shaking to get
+          results faster.
         </Text>
       </View>
 
       <QRCodeScanner
         onRead={({data}) => {
           verifyTicket(jwt_decode(data).ticket.purcchase_ticket_id);
+          // setJwtCode(data);
+          // verifyJWT();
         }}
         reactivate={true}
         reactivateTimeout={5000}
@@ -144,18 +173,16 @@ export default function Scanner({navigation, route}: any) {
         }}
       />
     </Flex>
-    
-    
   );
 }
 
 const styles = StyleSheet.create({
   barCode: {
     ...StyleSheet.absoluteFillObject,
-    height: "75%",
+    height: '75%',
     top: 125,
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: 30,
-    width: "100%",
+    width: '100%',
   },
 });

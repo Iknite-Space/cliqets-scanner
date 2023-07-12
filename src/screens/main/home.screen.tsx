@@ -12,9 +12,10 @@ import {CustomButton} from '../../components';
 import {ButtonType} from '../../components/general/Button.component';
 import SearchIcon from 'react-native-vector-icons/AntDesign';
 import DownloadIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+// import * as jose from 'jose';
 
 export default function Home({navigation, route}: any) {
-  const downloadGuestList = () => {};
+  // const downloadGuestList = () => {};
   const [tickets, setTickets] = useState([]);
 
   const goBackToEvents = () => {
@@ -27,6 +28,25 @@ export default function Home({navigation, route}: any) {
   BackHandler.removeEventListener('hardwareBackPress', goBackToEvents);
 
   const event_id = route.params.event_id;
+
+  // let jwtCode =
+  //   'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcl9uYW1lIjoiQWtvbmVoIiwiYW1vdW50IjoiMTAiLCJ0aWNrZXRfbm8iOiIiLCJoYWxsX25vIjowLCJvcmRlcl9ubyI6IiIsInNlYXRfbm8iOjAsInRpY2tldF9uYW1lIjoiR29sZCIsIm51bWJlcl9vZl90aWNrZXRzIjoiMSIsInBob25lX251bWJlciI6IjIzNzY4MTA5OTIzOCIsImlhdCI6MTUxNjIzOTAyMiwiaXNzIjoiand0LmlvIiwiYXVkIjoiY2xpcWtldHMuY29tIn0.qtc_oUvwk1u84YozVway1bD0c7-JxI-BE88Kzs8jIp-lC2ZcveXL7JHRzLtcaz29OhbwnR80o_Rs0PU2aKXHrQ';
+
+  // const verifyJWT: any = async () => {
+  //   const alg = 'ES256';
+  //   const spki = `-----BEGIN PUBLIC KEY-----
+  //   MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEEVs/o5+uQbTjL3chynL4wXgUg2R9
+  //   q9UU8I5mEovUf86QZ7kOBIjJwqnzD1omageEHWwHdBO6B+dFabmdT9POxg==
+  //   -----END PUBLIC KEY-----`;
+  //   const publicKey = await jose.importSPKI(spki, alg);
+
+  //   const verifiedJwt = await jose.jwtVerify(jwtCode, publicKey, {
+  //     issuer: 'jwt.io',
+  //     audience: 'cliqkets.com',
+  //   });
+
+  //   console.log(verifiedJwt);
+  // };
 
   useEffect(() => {
     const getTickets = async () => {
@@ -82,7 +102,7 @@ export default function Home({navigation, route}: any) {
             <Text fontSize="md" bold>
               Online
             </Text>
-            <Box rounded="full" backgroundColor="green.400" p="3"></Box>
+            <Box rounded="full" backgroundColor="green.400" p="3" />
           </Box>
         </View>
         <View alignItems="center" mt="5">
@@ -120,6 +140,17 @@ export default function Home({navigation, route}: any) {
             btnText="Scan Tickets"
             onPress={() => navigation.navigate('Scanner', {tickets})}
           />
+          {/* <Box my="5">
+            <CustomButton
+              btnType={ButtonType.PRIMARY}
+              btnText="Verify Tickets"
+              disabled={false}
+              loading={false}
+              onPress={() => {
+                verifyJWT();
+              }}
+            />
+          </Box> */}
 
           <Box
             flexDirection="row"

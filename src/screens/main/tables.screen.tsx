@@ -128,7 +128,7 @@ const Tables = ({navigation, route}: any) => {
             // setWebView(true);
             navigation.navigate('WebViewPage', {
               event_id: event_id,
-            })
+            });
           }}
         />
         {pdfPath && (

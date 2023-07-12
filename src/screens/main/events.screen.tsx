@@ -24,7 +24,7 @@ const Events = ({navigation, route}: Props) => {
   return (
     <ScrollView>
       <View px="2" pb="8" pt="2" bg="primary.500" w="100%">
-        <View display="flex"></View>
+        <View display="flex" />
         <Text color="white" bold fontSize="2xl" textAlign="center" mt="5">
           Select Event
         </Text>
@@ -42,6 +42,7 @@ const Events = ({navigation, route}: Props) => {
                 description={event?.description}
                 location={event?.venue}
                 date={event?.date}
+                signing_key={event?.signing_key}
                 navigation={navigation}
               />
             );

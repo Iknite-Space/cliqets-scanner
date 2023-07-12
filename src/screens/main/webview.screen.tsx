@@ -6,7 +6,12 @@ import {WebView} from 'react-native-webview';
 const WebViewPage = ({navigation, route}: any) => {
   return (
     <TouchableWithoutFeedback>
-      <WebView source={{uri: `https://dev.cliqets.xyz/checklist/${route.params.event_id}`}} style={{flex: 1}} />
+      <WebView
+        source={{
+          uri: `https://dev.cliqets.xyz/checklist/${route.params.event_id}`,
+        }}
+        style={{flex: 1}}
+      />
     </TouchableWithoutFeedback>
   );
 };
